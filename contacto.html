@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto | MiWebZapatos</title>
+  <link rel="stylesheet" href="css/index.css">
+  <style>
+    /* --- ESTILOS CONTACTO PREMIUM (FINAL) --- */
+    
+    /* Layout Principal */
+    .contact-main { 
+      max-width: 1100px; margin: 60px auto; padding: 0 20px;
+      display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: stretch; 
+    }
+
+    /* --- CLASE MAESTRA: BORDE MÁGICO (Para equilibrar ambos lados) --- */
+    .magic-border-box {
+      background: linear-gradient(135deg, #f7ba2b, #ea5358); /* Degradado Naranja/Amarillo */
+      padding: 3px; border-radius: 24px; position: relative;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+      display: flex; flex-direction: column;
+    }
+
+    /* --- CONTENIDO INTERNO DE LAS TARJETAS --- */
+    .card-inner {
+      background: var(--card-bg); 
+      border-radius: 21px; padding: 40px; 
+      height: 100%; display: flex; flex-direction: column; justify-content: center;
+    }
+
+    /* TIPOGRAFÍA */
+    h1, h2 { color: var(--text-title); font-weight: 800; margin-top: 0; line-height: 1.1; }
+    h1 { font-size: 2.5rem; margin-bottom: 20px; }
+    h2 { font-size: 2rem; margin-bottom: 30px; }
+    
+    p { font-size: 1.05rem; color: var(--muted); line-height: 1.6; margin-bottom: 40px; }
+
+    /* ITEMS DE CONTACTO (IZQUIERDA) */
+    .contact-item { display: flex; align-items: center; gap: 20px; margin-bottom: 30px; }
+    
+    .icon-box { 
+      width: 50px; height: 50px; 
+      background: rgba(16, 185, 129, 0.1); color: var(--pri); 
+      border-radius: 14px; display: flex; align-items: center; justify-content: center; 
+      font-size: 1.5rem; flex-shrink: 0;
+    }
+
+    /* --- INPUTS MODERNOS (MINIMALISTAS) --- */
+    .form-group { margin-bottom: 25px; }
+    
+    .input-modern {
+      width: 100%; padding: 12px 0;
+      background: transparent; border: none;
+      border-bottom: 2px solid rgba(0,0,0,0.1); /* Línea sutil */
+      font-size: 1rem; color: var(--text-title); font-family: 'Poppins', sans-serif;
+      transition: 0.3s; outline: none;
+      border-radius: 0; /* Elimina bordes redondos por defecto */
+    }
+    
+    /* Efecto al escribir */
+    .input-modern:focus {
+      border-color: var(--pri); /* Se ilumina verde */
+      padding-left: 10px; /* Pequeño desplazamiento */
+    }
+    .input-modern::placeholder { color: #aaa; transition: 0.3s; }
+    .input-modern:focus::placeholder { opacity: 0.5; transform: translateX(5px); }
+
+    /* --- BOTONES --- */
+    .btn-whatsapp {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      background: #25d366; color: white; padding: 15px; border-radius: 12px; 
+      font-weight: 700; text-decoration: none; margin-top: auto; transition: 0.3s;
+      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.25);
+    }
+    .btn-whatsapp:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(37, 211, 102, 0.4); }
+
+    .btn-send {
+      width: 100%; padding: 16px; 
+      background: var(--pri); color: white; border: none;
+      border-radius: 50px; font-size: 1.1rem; font-weight: 800; cursor: pointer; 
+      transition: 0.3s; margin-top: 15px; 
+      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .btn-send:hover { 
+      transform: translateY(-3px); box-shadow: 0 15px 35px rgba(16, 185, 129, 0.5); 
+      background: #059669;
+    }
+
+    /* TOAST (NOTIFICACIÓN) */
+    .toast-notification {
+      position: fixed; top: 20px; right: 20px;
+      background: var(--card-bg); padding: 16px 24px; border-radius: 16px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 15px;
+      z-index: 9999; border-left: 5px solid var(--pri);
+      transform: translateX(200%); transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    .toast-notification.active { transform: translateX(0); }
+    .toast-icon { width: 28px; height: 28px; background: var(--pri); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; }
+
+    /* RESPONSIVE */
+    @media(max-width: 900px){ .contact-main { grid-template-columns: 1fr; gap: 30px; } }
+  </style>
+</head>
+<body>
+
+  <div id="toast" class="toast-notification">
+    <div class="toast-icon">✓</div>
+    <div>
+      <h4 style="margin:0; font-size:1rem; font-weight:700; color:var(--text-title);">¡Mensaje Enviado!</h4>
+      <p style="margin:0; font-size:0.85rem; color:var(--muted);">Te contactaremos pronto.</p>
+    </div>
+  </div>
+
+  <header>
+    <div class="nav-wrap">
+      <div class="logo">
+        <div class="logo-icon">Z</div>
+        <div class="logo-text"><span class="logo-title">MiWebZapatos</span><span class="logo-sub">Store</span></div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="novedades.html">Novedades</a></li>
+          <li><a href="colecciones.html">Colecciones</a></li>
+          <li><a href="carrito.html">Carrito</a></li>
+          <li><a href="contacto.html" class="activo">Contacto</a></li>
+        </ul>
+      </nav>
+      <div class="nav-right">
+        <a href="perfil.html" class="btn-out" style="background:var(--card-bg); border-color:var(--pri); color:var(--pri); text-decoration:none;">
+          <span>👤</span> <span>Mi Perfil</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="contact-main">
+      
+      <div class="magic-border-box">
+        <div class="card-inner">
+          <h1>¡Hablemos!</h1>
+          <p>¿Necesitas ayuda con tu pedido o tienes dudas sobre una talla? Estamos disponibles para asesorarte en todo momento.</p>
+          
+          <div class="contact-item">
+            <div class="icon-box">📍</div>
+            <div>
+              <strong style="display:block; color:var(--text-title); font-size:1.1rem;">Visítanos</strong>
+              <span style="color:var(--muted);">San Salvador, Chalatenango</span>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="icon-box">📧</div>
+            <div>
+              <strong style="display:block; color:var(--text-title); font-size:1.1rem;">Escríbenos</strong>
+              <span style="color:var(--muted);">ventas@miwebzapatos.com</span>
+            </div>
+          </div>
+
+          <a href="https://wa.me/503759275116" target="_blank" class="btn-whatsapp">
+            <span>💬</span> Chat Directo en WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <div class="magic-border-box">
+        <div class="card-inner">
+          <h2>Envíanos un mensaje</h2>
+          
+          <form id="contactForm">
+            <div class="form-group">
+              <input type="text" class="input-modern" required placeholder="Tu Nombre Completo">
+            </div>
+            <div class="form-group">
+              <input type="email" class="input-modern" required placeholder="Correo Electrónico">
+            </div>
+            <div class="form-group">
+              <input type="tel" class="input-modern" placeholder="Teléfono (Opcional)">
+            </div>
+            <div class="form-group">
+              <textarea rows="3" class="input-modern" required placeholder="¿En qué podemos ayudarte?" style="resize: none;"></textarea>
+            </div>
+            
+            <button type="submit" class="btn-send">ENVIAR MENSAJE ➔</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer><span>© 2025 MiWebZapatos. Todos los derechos reservados.</span></footer>
+
+  <script src="auth.js"></script>
+  <script>
+    if(typeof requireAuth === 'function') requireAuth();
+
+    // --- Lógica del Modo Oscuro ---
+    (function(){
+      const b = document.body;
+      if(localStorage.getItem('theme')==='dark'){ b.classList.add('dark-mode'); }
+    })();
+
+    // --- Lógica del Formulario y Toast ---
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.classList.add('active');
+      setTimeout(() => t.classList.remove('active'), 3500);
+    }
+
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      const originalText = btn.textContent;
+      
+      // Simulación de envío
+      btn.textContent = 'ENVIANDO...';
+      btn.style.opacity = '0.7';
+      btn.style.cursor = 'wait';
+      
+      setTimeout(() => {
+        showToast(); 
+        e.target.reset(); // Limpia el formulario
+        btn.textContent = originalText;
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

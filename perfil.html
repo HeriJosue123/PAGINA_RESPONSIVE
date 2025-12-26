@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil VIP - ShoeStore</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/index.css">
+
+    <style>
+        /* Corrección para que el texto se vea bien NEGRO y GRUESO en las tarjetas blancas */
+        .addr-content h4 {
+            color: #0f172a !important; /* Negro intenso */
+            font-weight: 800 !important; /* Extra negrita */
+            font-size: 1.1rem;
+        }
+
+        .addr-content span {
+            color: #334155 !important; /* Gris oscuro fuerte */
+            font-weight: 700 !important; /* Negrita */
+            display: block;
+            margin-top: 4px;
+        }
+
+        .addr-content small {
+            color: #475569 !important; /* Gris medio (no pálido) */
+            font-weight: 600 !important; /* Semi-negrita */
+            font-size: 0.9rem; /* Letra un poco más grande */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-gradient-green"></div>
+    <ul class="background-anim">
+        <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+    </ul>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar glass-panel">
+            <a href="index.html" class="btn-back-store">
+                <i class="fa-solid fa-arrow-left-long"></i> Volver a Tienda
+            </a>
+
+            <div class="sidebar-header">
+                <div class="profile-frame">
+                    <img src="https://i.pravatar.cc/150?img=11" alt="Foto de Perfil">
+                    <button class="edit-avatar-btn"><i class="fa-solid fa-camera"></i></button>
+                </div>
+                <h2 class="profile-name" id="sidebar-name">Cargando...</h2>
+                <div class="status-pill free">Miembro Standard</div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <button class="menu-item active" data-target="panel-editar">
+                    <i class="fa-regular fa-id-card"></i><span>Datos Personales</span>
+                </button>
+                <button class="menu-item" data-target="panel-billetera">
+                    <i class="fa-solid fa-wallet"></i><span>Billetera & Pagos</span>
+                </button>
+                <button class="menu-item" data-target="panel-direcciones">
+                    <i class="fa-solid fa-map-location-dot"></i><span>Mis Direcciones</span>
+                </button>
+                <button class="menu-item" data-target="panel-resumen">
+                    <i class="fa-solid fa-bag-shopping"></i><span>Historial Pedidos</span>
+                </button>
+                <button class="menu-item vip-link" data-target="panel-vip">
+                    <i class="fa-solid fa-crown"></i><span>Hacerme VIP</span>
+                </button>
+                
+                <div class="menu-divider"></div>
+                
+                <div class="logout-section" style="margin-top: 20px; display: flex; flex-direction: column; align-items: center;">
+                    <p style="font-size: 0.7rem; color: var(--text-muted); opacity: 0.8; margin-bottom: 10px; letter-spacing: 1px;">SISTEMA CONECTADO</p>
+                    
+                    <div class="toggle-container">
+                      <div class="toggle-wrap">
+                        <input class="toggle-input" id="holo-toggle" type="checkbox" checked />
+                        <label class="toggle-track" for="holo-toggle">
+                          <div class="track-lines">
+                            <div class="track-line"></div>
+                          </div>
+                          <div class="toggle-thumb">
+                            <div class="thumb-core"></div>
+                            <div class="thumb-inner"></div>
+                            <div class="thumb-scan"></div>
+                            <div class="thumb-particles">
+                              <div class="thumb-particle"></div>
+                              <div class="thumb-particle"></div>
+                              <div class="thumb-particle"></div>
+                              <div class="thumb-particle"></div>
+                              <div class="thumb-particle"></div>
+                            </div>
+                          </div>
+                          <div class="toggle-data">
+                            <div class="data-text off">OFF</div>
+                            <div class="data-text on">ON</div>
+                            <div class="status-indicator off"></div>
+                            <div class="status-indicator on"></div>
+                          </div>
+                          <div class="energy-rings">
+                            <div class="energy-ring"></div>
+                            <div class="energy-ring"></div>
+                            <div class="energy-ring"></div>
+                          </div>
+                          <div class="interface-lines">
+                            <div class="interface-line"></div>
+                            <div class="interface-line"></div>
+                            <div class="interface-line"></div>
+                            <div class="interface-line"></div>
+                            <div class="interface-line"></div>
+                            <div class="interface-line"></div>
+                          </div>
+                          <div class="toggle-reflection"></div>
+                          <div class="holo-glow"></div>
+                        </label>
+                      </div>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content-area">
+
+            <section id="panel-editar" class="content-panel glass-panel active-panel">
+                <div class="panel-header">
+                    <h1>Información Personal</h1>
+                    <p>Gestiona tu identidad digital segura.</p>
+                </div>
+                <form class="vip-form" onsubmit="guardarDatos(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <div class="input-wrapper"><i class="fa-solid fa-user"></i><input type="text" id="input-nombre" value=""></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Apellido</label>
+                            <div class="input-wrapper"><i class="fa-regular fa-user"></i><input type="text" id="input-apellido" value=""></div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Correo Electrónico (Bloqueado)</label>
+                            <div class="input-wrapper disabled-input"><i class="fa-solid fa-envelope"></i><input type="email" id="input-email" value="" readonly></div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Teléfono Móvil</label>
+                            <div class="input-wrapper"><i class="fa-solid fa-mobile-screen"></i><input type="tel" value="+503 1234 5678"></div>
+                        </div>
+                    </div>
+                    <div class="form-actions"><button type="submit" class="btn-emerald">Guardar Cambios</button></div>
+                </form>
+            </section>
+
+            <section id="panel-billetera" class="content-panel glass-panel">
+                <div class="panel-header">
+                    <h1>Métodos de Pago</h1>
+                    <p>Tus tarjetas están encriptadas. Pasa el mouse para ver el reverso.</p>
+                </div>
+
+                <div class="cards-showcase">
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <p class="heading_8264">VIP MEMBER</p>
+                                <svg class="logo" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="36" height="36" viewBox="0 0 48 48">
+                                    <path fill="#ff9800" d="M32 10A14 14 0 1 0 32 38A14 14 0 1 0 32 10Z"></path><path fill="#d50000" d="M16 10A14 14 0 1 0 16 38A14 14 0 1 0 16 10Z"></path><path fill="#ff3d00" d="M18,24c0,4.755,2.376,8.95,6,11.48c3.624-2.53,6-6.725,6-11.48s-2.376-8.95-6-11.48 C20.376,15.05,18,19.245,18,24z"></path>
+                                </svg>
+                                
+                                <svg class="chip" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 35" width="40" height="40">
+                                    <path fill="#ffd700" d="M5,0h40c2.76,0,5,2.24,5,5v25c0,2.76-2.24,5-5,5H5c-2.76,0-5-2.24-5-5V5C0,2.24,2.24,0,5,0z"/>
+                                    <path fill="none" stroke="#b8860b" stroke-width="1.5" d="M10,0v35 M40,0v35 M0,12h15 M0,23h15 M35,12h15 M35,23h15 M25,8v19 M17,17h16"/>
+                                </svg>
+
+                                <svg class="contactless" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+                                
+                                <p class="number" id="card-number">0000 0000 0000 0000</p>
+                                <p class="valid_thru">VALID THRU</p>
+                                <p class="date_8264" id="card-date">MM / AA</p>
+                                <p class="name" id="card-holder">NOMBRE USUARIO</p>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="strip"></div>
+                                <div class="mstrip"></div>
+                                <div class="sstrip">
+                                    <p class="code">***</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="section-title">Vincular Nueva Tarjeta</h3>
+                <form class="vip-form" onsubmit="agregarTarjeta(event)">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Número de Tarjeta</label>
+                            <div class="input-wrapper"><i class="fa-solid fa-credit-card"></i><input type="text" placeholder="0000 0000 0000 0000" maxlength="19" required></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Titular</label>
+                            <div class="input-wrapper"><i class="fa-solid fa-user-tag"></i><input type="text" placeholder="Nombre como aparece" required></div>
+                        </div>
+                        <div class="form-group">
+                            <label>CVV / CVC</label>
+                            <div class="input-wrapper"><i class="fa-solid fa-lock"></i><input type="password" placeholder="***" maxlength="3" required></div>
+                        </div>
+                    </div>
+                    <div class="captcha-container green-theme">
+                        <div class="captcha-visual"><span id="captcha-code">8291</span></div>
+                        <div class="input-wrapper"><i class="fa-solid fa-shield-cat"></i><input type="text" id="captcha-input" placeholder="Código" required></div>
+                        <button type="button" class="refresh-btn" onclick="generarCaptcha()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                    </div>
+                    <div class="form-actions"><button type="submit" class="btn-emerald">Agregar Método Seguro</button></div>
+                </form>
+            </section>
+
+            <section id="panel-direcciones" class="content-panel glass-panel">
+                <div class="panel-header"><h1>Mis Direcciones</h1></div>
+                <div id="lista-direcciones" class="addresses-grid"></div>
+                <h3 class="section-title">Nueva Ubicación</h3>
+                <form class="vip-form" onsubmit="guardarDireccion(event)">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Dirección Exacta</label>
+                            <div class="input-wrapper"><i class="fa-solid fa-location-dot"></i><input type="text" id="dir-calle" required></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Departamento</label>
+                            <div class="input-wrapper"><i class="fa-solid fa-map"></i>
+                                <select id="dir-depto">
+                                    <option>San Salvador</option>
+                                    <option>La Libertad</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Referencia</label>
+                            <div class="input-wrapper"><i class="fa-solid fa-eye"></i><input type="text" id="dir-ref" placeholder="Color de casa..."></div>
+                        </div>
+                    </div>
+                    <div class="form-actions"><button type="submit" class="btn-emerald">Guardar Dirección</button></div>
+                </form>
+            </section>
+
+         <section id="panel-vip" class="content-panel glass-panel">
+    <div class="panel-header centered" style="border-bottom: none; margin-bottom: 30px;">
+        <h1>Membresía VIP</h1>
+        <p>Sube de nivel y accede a los mejores pares antes que nadie.</p>
+    </div>
+    
+    <div class="neon-pricing-container">
+        
+        <div class="neon-card basic">
+            <p class="heading">STARTER</p>
+            <p class="price">$20 <span>/año</span></p>
+            <div class="features-list">
+                <p>• 5% Descuento</p>
+                <p>• Puntos Dobles</p>
+                <p>• Acceso Rebajas</p>
+            </div>
+            <button class="neon-btn">SUSCRIBIRSE</button>
+        </div>
+
+        <div class="neon-card pro">
+            <div class="popular-badge">POPULAR</div>
+            <p class="heading">SNEAKERHEAD</p>
+            <p class="price">$50 <span>/año</span></p>
+            <div class="features-list">
+                <p>• Envío GRATIS</p>
+                <p>• 10% OFF Siempre</p>
+                <p>• Acceso 24h Antes</p>
+            </div>
+            <button class="neon-btn">SUSCRIBIRSE</button>
+        </div>
+
+        <div class="neon-card legend">
+            <p class="heading">LEYENDA</p>
+            <p class="price">$100 <span>/año</span></p>
+            <div class="features-list">
+                <p>• Acceso a DROPS</p>
+                <p>• Caja Misteriosa</p>
+                <p>• Soporte 24/7</p>
+            </div>
+            <button class="neon-btn">SUSCRIBIRSE</button>
+        </div>
+
+    </div>
+</section>
+
+            <section id="panel-resumen" class="content-panel glass-panel">
+                <div class="panel-header"><h1>Historial de Pedidos</h1><p>Tus compras recientes.</p></div>
+                <div class="orders-list">
+                    <div class="order-card-fixed">
+                        <div class="order-image-box"><img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=1964&auto=format&fit=crop" alt="Zapato"></div>
+                        <div class="order-details-box"><h4>Air Jordan 1 High Mocha</h4><div class="order-meta"><span><i class="fa-solid fa-ruler-combined"></i> Talla 43</span><span><i class="fa-solid fa-calendar-days"></i> 18 Dic, 2025</span></div></div>
+                        <div class="order-status-box"><span class="price-tag">$180.00</span><span class="status-badge on-way">En Camino</span></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <nav class="mobile-nav">
+        <button class="nav-btn active" data-target="panel-editar"><i class="fa-regular fa-id-card"></i></button>
+        <button class="nav-btn" data-target="panel-billetera"><i class="fa-solid fa-wallet"></i></button>
+        <button class="nav-btn highlight" data-target="panel-vip"><i class="fa-solid fa-crown"></i></button>
+        <button class="nav-btn menu-toggle-btn"><i class="fa-solid fa-bars"></i></button>
+    </nav>
+
+    
+
+    <script src="auth.js"></script>
+    <script src="theme.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- NUEVO: FUNCIÓN QUE CARGA DATOS REALES DE LA SESIÓN ---
+            function cargarDatosUsuario() {
+                // 1. INTENTAR OBTENER LA SESIÓN ACTIVA (El usuario que hizo login)
+                // "miwebzapatos_session" es donde auth.js suele guardar el usuario logueado
+                let activeUser = null;
+                try {
+                    activeUser = JSON.parse(localStorage.getItem('miwebzapatos_session'));
+                } catch(e) { console.log("No hay sesión activa"); }
+
+                // 2. Si no hay sesión, usar datos de Alexi (Por si abres el archivo directo)
+                const user = activeUser || {
+                    nombre: "Alexi",
+                    apellido: "Cliente", // Si esto estuviera vacío, el arreglo de abajo lo soluciona
+                    email: "alexi@ejemplo.com",
+                    tarjeta: "4242 9900 1122 8899",
+                    exp: "10/29"
+                };
+
+                // 3. Escribir nombre en el Sidebar
+                const sidebarName = document.getElementById('sidebar-name');
+                
+                // --- CORRECCIÓN JS: Usamos || "" para evitar el undefined ---
+                if(sidebarName) sidebarName.textContent = `${user.nombre} ${user.apellido || ""}`;
+
+                // 4. Escribir en la Tarjeta Voladora
+                const cardHolder = document.getElementById('card-holder');
+                const cardNumber = document.getElementById('card-number');
+                const cardDate = document.getElementById('card-date');
+
+                // --- CORRECCIÓN JS TAMBIÉN AQUÍ ---
+                if(cardHolder) cardHolder.textContent = `${user.nombre} ${user.apellido || ""}`.toUpperCase();
+                
+                // Si el usuario no tiene tarjeta guardada, mostrar asteriscos
+                if(cardNumber) cardNumber.textContent = user.tarjeta || "**** **** **** ****";
+                if(cardDate) cardDate.textContent = user.exp || "MM/AA";
+
+                // 5. Escribir en los Inputs del formulario
+                const inNombre = document.getElementById('input-nombre');
+                const inApellido = document.getElementById('input-apellido');
+                const inEmail = document.getElementById('input-email');
+
+                if(inNombre) inNombre.value = user.nombre || "";
+                if(inApellido) inApellido.value = user.apellido || "";
+                if(inEmail) inEmail.value = user.email || "";
+            }
+            
+            // ¡EJECUTAR LA CARGA DE DATOS!
+            cargarDatosUsuario();
+
+            // --- Lógica del Menú y Paneles (No tocada) ---
+            const menuItems = document.querySelectorAll('.menu-item:not(.logout), .nav-btn:not(.menu-toggle-btn)');
+            const panels = document.querySelectorAll('.content-panel');
+            const sidebar = document.querySelector('.sidebar');
+            const menuToggleBtn = document.querySelector('.menu-toggle-btn');
+            
+            // Lógica del botón SALIR (Holo Toggle)
+            const toggleLogout = document.getElementById('holo-toggle');
+            if(toggleLogout) {
+                toggleLogout.addEventListener('change', function() {
+                    if(!this.checked) { 
+                        // BORRAR SESIÓN AL SALIR
+                        localStorage.removeItem('miwebzapatos_session'); 
+                        
+                        setTimeout(() => { window.location.href = "login.html"; }, 1000);
+                    }
+                });
+            }
+
+            function switchPanel(targetId) {
+                panels.forEach(p => {
+                    p.classList.remove('active-panel');
+                    p.style.opacity = '0';
+                    setTimeout(() => { p.style.opacity = '1'; }, 50);
+                });
+                document.getElementById(targetId).classList.add('active-panel');
+                menuItems.forEach(i => i.dataset.target === targetId ? i.classList.add('active') : i.classList.remove('active'));
+            }
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const targetId = e.currentTarget.dataset.target;
+                    switchPanel(targetId);
+                    sidebar.classList.remove('show-sidebar');
+                });
+            });
+
+            if(menuToggleBtn) menuToggleBtn.addEventListener('click', () => sidebar.classList.toggle('show-sidebar'));
+
+            generarCaptcha();
+            if(document.getElementById('lista-direcciones').innerHTML.trim() === "") {
+                agregarDireccionDOM("Residencial Lomas Verdes #44", "San Salvador", "Portón Negro Eléctrico");
+            }
+        });
+
+        let captchaCode = "";
+        function generarCaptcha() {
+            captchaCode = Math.floor(1000 + Math.random() * 9000).toString();
+            document.getElementById("captcha-code").innerText = captchaCode;
+        }
+        function agregarTarjeta(e) {
+            e.preventDefault();
+            if(document.getElementById("captcha-input").value !== captchaCode) { alert("Código incorrecto"); return; }
+            alert("Tarjeta vinculada exitosamente."); generarCaptcha();
+        }
+        function guardarDireccion(e) {
+            e.preventDefault();
+            const calle = document.getElementById('dir-calle').value;
+            const depto = document.getElementById('dir-depto').value;
+            const ref = document.getElementById('dir-ref').value;
+            agregarDireccionDOM(calle, depto, ref);
+            document.getElementById('dir-calle').value = "";
+            alert("Dirección guardada.");
+        }
+        function agregarDireccionDOM(calle, depto, ref) {
+            const lista = document.getElementById('lista-direcciones');
+            const div = document.createElement('div');
+            div.className = 'address-card glass-green';
+            div.innerHTML = `<div class="addr-icon"><i class="fa-solid fa-location-dot"></i></div><div class="addr-content"><h4>${calle}</h4><span>${depto}</span><small>${ref}</small></div><button class="btn-trash" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash-can"></i></button>`;
+            lista.appendChild(div);
+        }
+        function guardarDatos(e) { e.preventDefault(); alert("Perfil actualizado."); }
+    </script>
+   
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <title>Hype Locker | Streetwear Exclusivo</title>
+  
+  <meta property="og:title" content="Hype Locker | Streetwear Exclusivo" />
+  <meta property="og:description" content="Descubre la nueva colección 2026. Tenis exclusivos, modo oscuro y experiencia 3D. ¡Entra ya!" />
+  <meta property="og:image" content="https://hype-locker.netlify.app/preview.jpg" />
+  <meta property="og:url" content="https://hype-locker.netlify.app/" />
+  <meta property="og:type" content="website" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://hype-locker.netlify.app/preview.jpg">
+  <link rel="stylesheet" href="css/index.css">
+  <style>
+    /* --- ESTILOS PREMIUM CORREGIDOS --- */
+
+    /* 1. HERO (PORTADA) CON FONDO SUAVE */
+    .hero {
+      min-height: 85vh; /* Ocupa casi toda la pantalla */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      /* Fondo radial muy sutil para que no se vea "plano" */
+      background: radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 60%);
+      overflow: hidden;
+    }
+
+    .hero-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1200px; /* Ancho máximo para que no se estire demasiado */
+      gap: 40px;
+      flex-wrap: wrap; /* Para que baje en celular */
+    }
+
+    /* 2. TEXTO HERO (IZQUIERDA) */
+    .hero-text {
+      flex: 1;
+      min-width: 300px;
+      padding: 20px;
+    }
+
+    .badge-new {
+      display: inline-block;
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--pri);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .hero-text h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem); /* Se adapta al tamaño de pantalla */
+      line-height: 1.1;
+      font-weight: 900;
+      color: var(--text-title);
+      margin-bottom: 20px;
+    }
+
+    /* Efecto degradado en la palabra clave */
+    .hero-text h1 span {
+      background: linear-gradient(to right, #f7ba2b, #ea5358);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 40px;
+      max-width: 500px;
+    }
+
+    /* 3. BOTÓN NEÓN (VERDE) */
+    .btn-neon {
+      background: var(--pri);
+      color: white;
+      padding: 15px 35px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3); /* Sombra verde */
+      border: 2px solid var(--pri);
+    }
+
+    .btn-neon:hover {
+      background: transparent;
+      color: var(--pri);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4);
+    }
+
+    /* 4. MAGIC CARD GIGANTE (DERECHA) */
+    .hero-graphic {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      min-width: 320px;
+    }
+
+    .magic-card-hero {
+      /* Borde Degradado */
+      background: linear-gradient(135deg, #f7ba2b, #ea5358);
+      padding: 4px; /* Grosor del borde */
+      border-radius: 30px;
+      width: 100%;
+      max-width: 450px;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      transition: transform 0.3s;
+    }
+    
+    /* Brillo detrás de la tarjeta */
+    .magic-card-hero::after {
+      content: ""; position: absolute; top: 20px; left: 10px; right: 10px; bottom: 0;
+      background: linear-gradient(135deg, #f7ba2b, #ea5358);
+      filter: blur(40px); opacity: 0.4; z-index: -1;
+    }
+
+    .magic-card-hero:hover { transform: translateY(-10px); }
+
+    .magic-inner {
+      background: var(--card-bg); /* Fondo blanco/oscuro */
+      border-radius: 26px;
+      padding: 40px 30px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-shoe-img {
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 20px 30px rgba(0,0,0,0.2));
+      animation: float 4s ease-in-out infinite; /* Flota suavemente */
+      margin-bottom: 20px;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .hero-price {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--text-title);
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    /* 5. CATEGORÍAS ESTILO MAGIC CARD */
+    .grid-cats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+
+    .cat-card {
+      background: linear-gradient(to right, #f7ba2b, #ea5358); /* Borde mágico */
+      padding: 2px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .cat-card:hover { transform: translateY(-5px); }
+
+    .cat-inner {
+      background: var(--card-bg);
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      height: 100%;
+    }
+
+    .cat-img {
+      width: 100%;
+      height: 180px;
+      object-fit: contain;
+      margin-bottom: 15px;
+      transition: transform 0.3s;
+    }
+    .cat-card:hover .cat-img { transform: scale(1.1); }
+
+    .cat-title { font-size: 1.2rem; font-weight: 800; color: var(--text-title); margin: 0; }
+    .cat-link { color: var(--pri); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; margin-top: 5px; display: block; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero-container { flex-direction: column-reverse; text-align: center; }
+      .hero-text { align-items: center; display: flex; flex-direction: column; }
+      .hero-graphic { width: 100%; }
+    }
+
+    /* --- ESTILO SWITCH EN HEADER (DERECHA) --- */
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 20px; /* Espacio entre el perfil y el switch */
+    }
+
+    .neo-toggle-container {
+        /* Ajuste de escala para el header */
+        transform: scale(0.65); 
+        transform-origin: center;
+        margin: 0; 
+        display: flex;
+        align-items: center;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-wrap">
+      <div class="logo">
+        <div class="logo-icon">Z</div>
+        <div class="logo-text">
+          <span class="logo-title">MiWebZapatos</span>
+          <span class="logo-sub">Store</span>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html" class="activo">Inicio</a></li>
+          <li><a href="novedades.html">Novedades</a></li>
+          <li><a href="colecciones.html">Colecciones</a></li>
+          <li><a href="carrito.html">Carrito</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+      
+      <div class="nav-right">
+        
+        <a href="perfil.html" class="btn-out" style="background:var(--card-bg); border-color:var(--pri); color:var(--pri); text-decoration:none;">
+          <span>👤</span> <span>Mi Perfil</span>
+        </a>
+
+        <div class="neo-toggle-container">
+            <input class="neo-toggle-input" id="neo-toggle" type="checkbox" />
+            <label class="neo-toggle" for="neo-toggle">
+              <div class="neo-track">
+                <div class="neo-background-layer"></div>
+                <div class="neo-grid-layer"></div>
+                <div class="neo-track-highlight"></div>
+              </div>
+              <div class="neo-thumb">
+                <div class="neo-thumb-ring"></div>
+              </div>
+            </label>
+        </div>
+
+      </div>
+
+    </div>
+  </header>
+
+  <main>
+    
+    <section class="hero">
+      <div class="hero-container">
+        
+        <div class="hero-text">
+          <span class="badge-new">✨ Nueva Colección 2026</span>
+          <h1>Tu estilo <br> <span>favorito</span> te espera.</h1>
+          <p class="hero-sub">
+            Descubre la fusión perfecta entre diseño urbano y comodidad. 
+            Calidad premium y envíos express a todo el país.
+          </p>
+          <a href="novedades.html" class="btn-neon">
+            VER NOVEDADES <span>→</span>
+          </a>
+        </div>
+
+        <div class="hero-graphic">
+          <div class="magic-card-hero">
+            <div class="magic-inner">
+              <div style="text-align: right; margin-bottom: 10px;">
+                <span style="background: #ef4444; color: white; padding: 5px 12px; border-radius: 12px; font-weight: bold; font-size: 0.8rem;">TOP VENTAS</span>
+              </div>
+
+              <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=600&auto=format&fit=crop" alt="Zapato Destacado" class="hero-shoe-img">
+
+              <h3 style="font-size: 1.4rem; color: var(--text-title); margin: 0;">Nike Air Jordan Retro</h3>
+              <p style="color: var(--muted); margin: 5px 0 15px;">El clásico que nunca falla.</p>
+              
+              <span class="hero-price">$179.99</span>
+              <small style="color: var(--pri); font-weight: 700;">Envío Gratis hoy</small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section style="padding: 60px 20px;">
+      <div style="text-align: center; margin-bottom: 40px;">
+        <h2 style="font-size: 2rem; color: var(--text-title); font-weight: 800;">Categorías Principales</h2>
+        <p style="color: var(--muted);">Encuentra exactamente lo que buscas.</p>
+      </div>
+
+      <div class="grid-cats">
+        
+        <div class="cat-card" onclick="location.href='novedades.html'">
+          <div class="cat-inner">
+            <img src="https://images.unsplash.com/photo-1617606002779-51d866bdd1d1?q=80&w=400&auto=format&fit=crop" alt="Hombres" class="cat-img">
+            <h3 class="cat-title">Hombres</h3>
+            <span class="cat-link">Ver Colección</span>
+          </div>
+        </div>
+
+        <div class="cat-card" onclick="location.href='novedades.html'">
+          <div class="cat-inner">
+            <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=400&auto=format&fit=crop" alt="Mujeres" class="cat-img">
+            <h3 class="cat-title">Mujeres</h3>
+            <span class="cat-link">Ver Colección</span>
+          </div>
+        </div>
+
+        <div class="cat-card" onclick="location.href='novedades.html'">
+          <div class="cat-inner">
+            <img src="https://images.unsplash.com/photo-1514989940723-e8e475085662?q=80&w=400&auto=format&fit=crop" alt="Niños" class="cat-img">
+            <h3 class="cat-title">Niños</h3>
+            <span class="cat-link">Ver Colección</span>
+          </div>
+        </div>
+
+        <div class="cat-card" onclick="location.href='colecciones.html'">
+          <div class="cat-inner">
+            <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=400&auto=format&fit=crop" alt="Running" class="cat-img">
+            <h3 class="cat-title">Running</h3>
+            <span class="cat-link">Ver Colección</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>© 2025 MiWebZapatos. Todos los derechos reservados.</span>
+  </footer>
+
+  <script src="auth.js"></script>
+  <script>
+    if(typeof requireAuth === 'function'){ requireAuth(); }
+
+    const toggleInput = document.getElementById('neo-toggle');
+    const body = document.body;
+    
+    if (localStorage.getItem('theme') === 'dark') {
+      body.classList.add('dark-mode');
+      toggleInput.checked = true;
+    }
+    
+    toggleInput.addEventListener('change', () => {
+      if (toggleInput.checked) {
+        body.classList.add('dark-mode');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        body.classList.remove('dark-mode');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  </script>
+</body>
+</html>

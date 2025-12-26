@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso | MiWebZapatos</title>
+  
+  <style>
+    /* --- RESET Y ESTRUCTURA BASE --- */
+    * { box-sizing: border-box; }
+    body, html { margin: 0; padding: 0; height: 100%; font-family: sans-serif; overflow: hidden; }
+
+    /* Fondo Negro Puro (Como pediste) */
+    .wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: black;
+      z-index: -2;
+      perspective: 1000px; /* Para el efecto 3D */
+    }
+
+    /* --- LÓGICA DEL FLIP (GIRO) --- */
+    .card-switch { display: none; } /* Checkbox oculto */
+    
+    .flip-card-inner {
+      position: relative;
+      width: 380px;
+      height: 500px; /* Altura ajustada para que quepa todo */
+      text-align: center;
+      transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      transform-style: preserve-3d;
+    }
+
+    /* Al marcar el checkbox, giramos */
+    #card_toggle:checked ~ .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    /* --- ESTILO DE LA TARJETA (TU DISEÑO NUEVO) --- */
+    .form-face {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      backface-visibility: hidden; /* Oculta la parte trasera */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      padding: 2rem 3rem;
+      
+      /* TU CSS ORIGINAL DE LA TARJETA */
+      border: 1px solid transparent;
+      border-image: linear-gradient(transparent, #ffe0a6, transparent) 1;
+      border-width: 0 2px 0px 2px;
+      background: radial-gradient(100% 61.73% at 100% 50%, rgba(255, 224, 166, 0.05) 0%, transparent 100%),
+                  radial-gradient(91.09% 56.23% at 0% 50%, rgba(255, 224, 166, 0.05) 0%, transparent 100%);
+      background-color: #050505; /* Fondo base muy oscuro */
+    }
+
+    /* Sombras sutiles pseudo-elementos */
+    .form-face::before { content: ""; position: absolute; inset: -1rem; border: inherit; opacity: 0.15; z-index: -1; pointer-events: none; }
+    .form-face::after { content: ""; position: absolute; inset: -2rem; border: inherit; opacity: 0.05; z-index: -1; pointer-events: none; }
+
+    /* Rotación de la cara trasera (Registro) */
+    .form-back { transform: rotateY(180deg); }
+
+    /* Textura de fondo (Scanlines) */
+    .texture {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background-image: linear-gradient(0deg, #ffffff 1px, transparent 1px);
+      background-size: 1px 5px;
+      mix-blend-mode: soft-light;
+      mask-image: radial-gradient(30% 45% at 50% 50%, white 0%, transparent 100%);
+      opacity: 0.3;
+    }
+
+    /* Títulos */
+    .title {
+      font-size: 2rem; font-weight: 700; letter-spacing: 0.5rem; text-transform: uppercase;
+      background: linear-gradient(rgb(170, 170, 170), rgb(78, 78, 78));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      margin-bottom: 10px; z-index: 2;
+    }
+
+    /* --- INPUTS --- */
+    .input-container {
+      display: flex; align-items: center; width: 100%;
+      background: radial-gradient(47.3% 73.08% at 50% 94.23%, rgba(255, 255, 255, 0.05) 5%, transparent 100%);
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.3s; z-index: 2;
+    }
+    
+    .input-container svg { stroke: grey; margin-right: 10px; min-width: 24px; transition: 0.3s; }
+    
+    .input {
+      background: none; border: none; padding: 0.8rem 1rem; color: white; width: 100%; outline: none; font-size: 1rem;
+    }
+    .input::placeholder { color: #666; }
+
+    /* Efectos Focus */
+    .input-container:focus-within {
+      background: radial-gradient(47.3% 73.08% at 50% 94.23%, rgba(255, 224, 166, 0.1) 5%, transparent 100%);
+      border-bottom: 1px solid #ffe0a6;
+    }
+    .input-container:focus-within svg g { stroke: #ffe0a6; }
+    .input:focus { color: #ffe0a6; }
+
+    /* --- BOTONES --- */
+    .login-button { width: 100%; position: relative; margin-top: 15px; z-index: 2; }
+    
+    .btn-submit {
+      cursor: pointer; padding: 1rem; width: 100%;
+      background: radial-gradient(100% 45% at 50% 50%, rgba(255, 224, 166, 0.1) 0%, transparent 100%);
+      border: 1px solid transparent;
+      border-image: linear-gradient(transparent, #ffe0a6, transparent) 1;
+      border-width: 0 1px;
+      color: #ffe0a6; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;
+      transition: 0.3s;
+    }
+    
+    /* Efecto "Flicker" (Parpadeo) en hover */
+    .btn-submit:hover { width: 105%; margin-left: -2.5%; animation: flicker 0.5s infinite; background-color: rgba(255,224,166,0.05); }
+    
+    @keyframes flicker {
+      0%, 100% { opacity: 1; } 50% { opacity: 0.8; }
+    }
+
+    /* --- SWITCH (Cambiar entre Login/Registro) --- */
+    .switch { font-size: 0.85rem; color: #888; margin-top: 20px; z-index: 2; }
+    .switch label {
+      color: #ffe0a6; cursor: pointer; text-decoration: underline; margin-left: 5px; transition: 0.3s;
+    }
+    .switch label:hover { text-shadow: 0 0 10px #ffe0a6; color: white; }
+
+    /* --- TOAST (Mensajes) --- */
+    .toast-box {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(50px);
+      background: #111; color: #ffe0a6; border: 1px solid #ffe0a6;
+      padding: 12px 30px; border-radius: 4px; font-size: 0.9rem;
+      opacity: 0; transition: 0.4s; pointer-events: none; z-index: 100;
+      box-shadow: 0 0 15px rgba(255, 224, 166, 0.2);
+    }
+    .toast-box.active { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  </style>
+</head>
+<body>
+
+  <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="gradient-stroke" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#888" />
+        <stop offset="100%" stop-color="#ffe0a6" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <div class="wrapper">
+    <input id="card_toggle" type="checkbox" class="card-switch">
+    
+    <div class="flip-card-inner">
+      
+      <div class="form-face form-front">
+        <span class="title">LOGIN</span>
+
+        <div class="input-container">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g stroke="url(#gradient-stroke)" stroke-width="1">
+              <path d="M21.6365 5H3L12.2275 12.3636L21.6365 5Z"></path>
+              <path d="M16.5 11.5L22.5 6.5V17L16.5 11.5Z"></path>
+              <path d="M8 11.5L2 6.5V17L8 11.5Z"></path>
+              <path d="M9.5 12.5L2.81805 18.5002H21.6362L15 12.5L12 15L9.5 12.5Z"></path>
+            </g>
+          </svg>
+          <input class="input" type="email" id="loginEmail" placeholder="Email" />
+        </div>
+
+        <div class="input-container">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g stroke="url(#gradient-stroke)" stroke-width="1">
+              <path d="M3.5 15.5503L9.20029 9.85L12.3503 13L11.6 13.7503H10.25L9.8 15.1003L8 16.0003L7.55 18.2503L5.5 19.6003H3.5V15.5503Z"></path>
+              <path d="M16 3.5H11L8.5 6L16 13.5L21 8.5L16 3.5Z"></path>
+              <path d="M16 10.5L18 8.5L15 5.5H13L12 6.5L16 10.5Z"></path>
+            </g>
+          </svg>
+          <input class="input" type="password" id="loginPass" placeholder="Password" />
+        </div>
+
+        <div class="login-button">
+          <input class="btn-submit" type="submit" value="ENTRAR" onclick="handleLogin()" />
+        </div>
+
+        <div class="switch">
+          ¿No tienes cuenta? <label for="card_toggle">Regístrate</label>
+        </div>
+
+        <div class="texture"></div>
+      </div>
+
+      <div class="form-face form-back">
+        <span class="title">REGISTRO</span>
+
+        <div class="input-container">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="url(#gradient-stroke)" stroke-width="1">
+             <circle cx="12" cy="8" r="4" />
+             <path d="M6 20v-2a6 6 0 0 1 12 0v2" />
+          </svg>
+          <input class="input" type="text" id="regName" placeholder="Nombre" />
+        </div>
+
+        <div class="input-container">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g stroke="url(#gradient-stroke)" stroke-width="1">
+              <path d="M21.6365 5H3L12.2275 12.3636L21.6365 5Z"></path>
+              <path d="M16.5 11.5L22.5 6.5V17L16.5 11.5Z"></path>
+              <path d="M8 11.5L2 6.5V17L8 11.5Z"></path>
+              <path d="M9.5 12.5L2.81805 18.5002H21.6362L15 12.5L12 15L9.5 12.5Z"></path>
+            </g>
+          </svg>
+          <input class="input" type="email" id="regEmail" placeholder="Email" />
+        </div>
+
+        <div class="input-container">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g stroke="url(#gradient-stroke)" stroke-width="1">
+              <path d="M3.5 15.5503L9.20029 9.85L12.3503 13L11.6 13.7503H10.25L9.8 15.1003L8 16.0003L7.55 18.2503L5.5 19.6003H3.5V15.5503Z"></path>
+              <path d="M16 3.5H11L8.5 6L16 13.5L21 8.5L16 3.5Z"></path>
+              <path d="M16 10.5L18 8.5L15 5.5H13L12 6.5L16 10.5Z"></path>
+            </g>
+          </svg>
+          <input class="input" type="password" id="regPass" placeholder="Password" />
+        </div>
+
+        <div class="login-button">
+          <input class="btn-submit" type="submit" value="CREAR CUENTA" onclick="handleSignup()" />
+        </div>
+
+        <div class="switch">
+          ¿Ya tienes cuenta? <label for="card_toggle">Inicia sesión</label>
+        </div>
+
+        <div class="texture"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="toast" class="toast-box">Mensaje</div>
+
+  <script>
+    const USERS_KEY = 'miwebzapatos_users';
+    const SESSION_KEY = 'miwebzapatos_session';
+
+    // 1. Inicializar usuario default
+    let users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
+    if (users.length === 0) {
+      users.push({ nombre: "Alexi", email: "alexi@ejemplo.com", password: "123", role: "user" });
+      localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    }
+
+    function handleLogin() {
+      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+      const pass = document.getElementById('loginPass').value.trim();
+
+      if(!email || !pass) return showToast('Completa los campos');
+
+      const currentUsers = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
+      const user = currentUsers.find(u => u.email === email && u.password === pass);
+
+      if(user) {
+        localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+        showToast(`Bienvenido, ${user.nombre}`);
+        setTimeout(() => window.location.href = 'perfil.html', 1500);
+      } else {
+        showToast('Datos incorrectos');
+      }
+    }
+
+    function handleSignup() {
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim().toLowerCase();
+      const pass = document.getElementById('regPass').value.trim();
+
+      if(!name || !email || !pass) return showToast('Faltan datos');
+
+      const currentUsers = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
+      if(currentUsers.find(u => u.email === email)) {
+        return showToast('Ese correo ya existe');
+      }
+
+      const newUser = { nombre: name, email: email, password: pass, role: "user" };
+      currentUsers.push(newUser);
+      localStorage.setItem(USERS_KEY, JSON.stringify(currentUsers));
+
+      showToast('¡Cuenta Creada! Entrando...');
+      
+      // Auto-login simple
+      setTimeout(() => {
+        document.getElementById('card_toggle').checked = false; // Voltear
+        document.getElementById('loginEmail').value = email;
+      }, 1000);
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('active');
+      setTimeout(() => t.classList.remove('active'), 3000);
+    }
+
+    // Tecla Enter
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+          if(document.getElementById('card_toggle').checked) handleSignup();
+          else handleLogin();
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

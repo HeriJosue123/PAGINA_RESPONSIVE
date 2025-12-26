@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colecciones | MiWebZapatos</title>
+  <link rel="stylesheet" href="css/index.css">
+  <style>
+    /* --- ESTILOS HEADER Y FILTROS --- */
+    .col-header { text-align: center; padding: 40px 0 20px; }
+    .col-header h1 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 10px; color: var(--text-title); font-weight: 800; }
+    .col-header p { color: var(--muted); max-width: 600px; margin: 0 auto; font-size: 1.1rem; }
+
+    .filter-bar { display: flex; justify-content: center; gap: 10px; margin: 30px 0; flex-wrap: wrap; }
+    .filter-btn {
+      padding: 10px 22px; border-radius: 99px; border: 1px solid rgba(0,0,0,0.1);
+      background: var(--card-bg); color: var(--muted); font-weight: 600; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { border-color: var(--pri); color: var(--pri); transform: translateY(-2px); }
+    .filter-btn.active { background: var(--pri); color: white; border-color: var(--pri); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25); }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* --- ESTILO MAGIC CARD --- */
+    .card {
+      /* Degradado mágico */
+      --magic-grad: linear-gradient(to left, #f7ba2b 0%, #ea5358 100%);
+      
+      position: relative;
+      background: var(--magic-grad);
+      padding: 3px;
+      border-radius: 1rem;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s;
+    }
+
+    /* Brillo (Glow) detrás de la tarjeta */
+    .card::after {
+      position: absolute;
+      content: "";
+      top: 10px; left: 0; right: 0; bottom: 0;
+      z-index: -1;
+      height: 100%; width: 100%;
+      transform: scale(0.9);
+      filter: blur(20px);
+      background: var(--magic-grad);
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+
+    .card:hover::after { opacity: 0.6; }
+    .card:hover { transform: translateY(-5px); }
+
+    /* Contenedor INTERNO */
+    .card-inner {
+      background: var(--card-bg);
+      width: 100%; height: 100%;
+      border-radius: calc(1rem - 3px);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+
+    .card-img-wrap {
+      position: relative;
+      height: 220px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--card-bg); /* Fondo neutro */
+      overflow: hidden;
+      padding: 15px;
+    }
+    .card-img-wrap img {
+      width: 100%; height: 100%; object-fit: contain;
+      transition: transform 0.4s ease;
+    }
+    .card:hover .card-img-wrap img { transform: scale(1.08); }
+
+    .card-body {
+      padding: 20px;
+      display: flex; flex-direction: column;
+      flex-grow: 1;
+      text-align: center;
+    }
+    .card-body h3 { font-size: 1.1rem; margin: 0 0 5px; color: var(--text-title); }
+    .card-body p { font-size: 0.9rem; color: var(--muted); margin-bottom: 15px; flex-grow: 1; }
+    .card-price { font-size: 1.3rem; font-weight: 800; color: var(--text-title); margin-bottom: 15px; display: block; }
+    
+    .card-actions { 
+      display: flex; gap: 12px; justify-content: center; align-items: center; 
+      margin-top: auto; 
+    }
+
+    /* --- NUEVO BOTÓN GLOW INTEGRADO (Btn Agregar) --- */
+    .btn-add {
+      /* Adaptado a VERDE (var(--pri)) */
+      --glow-color: var(--pri); 
+      --glow-spread-color: rgba(16, 185, 129, 0.6);
+      --btn-color: #022c22;
+      
+      border: 0.15em solid var(--glow-color);
+      padding: 0.6em 1.5em;
+      color: var(--glow-color);
+      font-size: 0.9rem;
+      font-weight: bold;
+      background-color: transparent; 
+      border-radius: 1em;
+      outline: none;
+      box-shadow: 0 0 0.5em 0.1em var(--glow-color),
+                  inset 0 0 0.2em 0.1em var(--glow-color);
+      text-shadow: 0 0 0.5em var(--glow-color);
+      position: relative;
+      transition: all 0.3s;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-add:hover {
+      color: white;
+      background-color: var(--glow-color);
+      box-shadow: 0 0 1em 0.25em var(--glow-color),
+                  0 0 4em 1em var(--glow-spread-color),
+                  inset 0 0 0.75em 0.25em var(--glow-color);
+    }
+
+    .btn-add:active {
+      box-shadow: 0 0 0.6em 0.25em var(--glow-color),
+                  0 0 2.5em 2em var(--glow-spread-color),
+                  inset 0 0 0.5em 0.25em var(--glow-color);
+    }
+
+    /* Botón Ver */
+    .btn-link { 
+      background: transparent; color: var(--muted); border: 1px solid rgba(128,128,128,0.3); 
+      padding: 0.6em 1.2em; border-radius: 1em; cursor: pointer; font-weight: 600; font-size: 0.9rem; 
+      transition: 0.3s;
+    }
+    .btn-link:hover { border-color: var(--text-title); color: var(--text-title); }
+
+
+    /* --- UTILIDADES --- */
+    .no-results { grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--muted); font-style: italic; background: rgba(255,255,255,0.5); border-radius: 20px; }
+
+    /* Toast Notification */
+    .toast-notification {
+      position: fixed; top: 20px; right: 20px;
+      background: var(--card-bg); backdrop-filter: blur(10px);
+      padding: 16px 24px; border-radius: 16px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+      display: flex; align-items: center; gap: 15px; z-index: 9999;
+      border-left: 5px solid var(--pri);
+      transform: translateX(200%); transition: transform 0.5s;
+    }
+    .toast-notification.active { transform: translateX(0); }
+    .toast-icon { width: 24px; height: 24px; background: var(--pri); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+
+    /* Modal */
+    .modal-bg {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center;
+      z-index: 10000; opacity: 0; transition: opacity 0.3s ease;
+    }
+    .modal-bg.active { display: flex; opacity: 1; }
+
+    .modal-content {
+      background: var(--card-bg); width: 90%; max-width: 450px;
+      border-radius: 24px; padding: 40px; text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      position: relative; transform: translateY(20px); transition: transform 0.3s ease;
+    }
+    .modal-bg.active .modal-content { transform: translateY(0); }
+
+    .close {
+      position: absolute; top: 15px; right: 20px;
+      font-size: 2rem; color: #999; background: none; border: none;
+      cursor: pointer; transition: 0.2s;
+    }
+    .close:hover { color: var(--danger); transform: scale(1.1); }
+
+    #modalImg {
+      width: 100%; height: 250px; object-fit: contain;
+      filter: drop-shadow(0 15px 25px rgba(0,0,0,0.15));
+      margin-bottom: 20px; transform: rotate(-10deg); transition: 0.3s;
+    }
+    #modalImg:hover { transform: rotate(0deg) scale(1.05); }
+
+    #modalTitle { font-size: 1.8rem; margin: 0 0 10px; color: var(--text-title); line-height: 1.1; font-weight: 800; }
+    #modalDesc { color: var(--muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; }
+    
+    .price-tag {
+      font-size: 2rem; font-weight: 800; color: var(--pri);
+      display: block; margin-bottom: 25px;
+    }
+    .modal-actions { display: grid; gap: 10px; }
+  </style>
+</head>
+<body>
+
+  <div id="toast" class="toast-notification">
+    <div class="toast-icon">✓</div>
+    <div>
+      <h4 style="margin:0; font-size:0.95rem; font-weight:700; color:var(--text-title);">¡Agregado!</h4>
+      <p style="margin:0; font-size:0.8rem; color:var(--muted);">Ya está en tu carrito.</p>
+    </div>
+  </div>
+
+  <header>
+    <div class="nav-wrap">
+      <div class="logo">
+        <div class="logo-icon">Z</div>
+        <div class="logo-text"><span class="logo-title">MiWebZapatos</span><span class="logo-sub">Store</span></div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="novedades.html">Novedades</a></li>
+          <li><a href="colecciones.html" class="activo">Colecciones</a></li>
+          <li><a href="carrito.html">Carrito</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+      <div class="nav-right">
+        <a href="perfil.html" class="btn-out" style="background:var(--card-bg); border-color:var(--pri); color:var(--pri); text-decoration:none;">
+          <span>👤</span> <span>Mi Perfil</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="col-header">
+      <h1>Colecciones Exclusivas</h1>
+      <p>Encuentra tu estilo perfecto. Desde lo urbano hasta lo deportivo.</p>
+    </section>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filtrar('urbana', this)">Urbana</button>
+      <button class="filter-btn" onclick="filtrar('running', this)">Running</button>
+      <button class="filter-btn" onclick="filtrar('clasicos', this)">Clásicos</button>
+      <button class="filter-btn" onclick="filtrar('basket', this)">Basket</button>
+    </div>
+
+    <div class="grid" id="grid-colecciones"></div>
+  </main>
+
+  <div class="modal-bg" id="modalBox">
+    <div class="modal-content">
+      <button class="close" onclick="closeModal()">&times;</button>
+      <img id="modalImg" src="" alt="Zapato">
+      <h3 id="modalTitle">Nombre</h3>
+      <p id="modalDesc">Descripción...</p>
+      <span class="price-tag" id="modalPrice">$0.00</span>
+      
+      <div class="modal-actions">
+        <button id="modalAddBtn" class="btn-main" style="width:100%; justify-content:center; padding:15px; border-radius:12px; background:var(--pri); color:white; border:none; font-weight:bold; font-size:1.1rem; cursor:pointer;">
+          🛒 Agregar al Carrito
+        </button>
+        <button onclick="closeModal()" class="btn-out" style="width:100%; justify-content:center; border:none; color:var(--muted); background:transparent; cursor:pointer;">
+          Seguir viendo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer><span>© 2025 MiWebZapatos.</span></footer>
+
+  <script src="auth.js"></script>
+  <script src="theme.js"></script> 
+  
+  <script>
+    if(typeof requireAuth === 'function') requireAuth();
+    
+    function showToast() { const t = document.getElementById('toast'); t.classList.add('active'); setTimeout(() => t.classList.remove('active'), 3000); }
+
+    let colecciones = { urbana:[], running:[], clasicos:[], basket:[] };
+    let actual = 'urbana';
+
+    // --- BASE DE DATOS LOCAL CORREGIDA ---
+    const catalogoZapatos = [
+      { id: 'h1', title: 'Nike Air Force 1 White', price: 119.99, thumbnail: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=800&auto=format&fit=crop', description: 'El clásico indiscutible. Diseño limpio y atemporal.', gender: 'hombres', tags: ['urbana', 'clasicos'] },
+      { id: 'h2', title: 'Air Jordan 1 High OG', price: 179.99, thumbnail: 'https://images.unsplash.com/photo-1613673720434-a6f111296d86?q=80&w=800&auto=format&fit=crop', description: 'Icono del baloncesto con colores retro premium.', gender: 'hombres', tags: ['clasicos', 'basket'] },
+      { id: 'h3', title: 'Adidas Forum Low', price: 109.99, thumbnail: 'https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?q=80&w=800&auto=format&fit=crop', description: 'Estilo de los 80 revivido para las calles de hoy.', gender: 'hombres', tags: ['urbana', 'basket'] },
+      { id: 'h4', title: 'New Balance 574 Core', price: 89.99, thumbnail: 'https://images.unsplash.com/photo-1539185441755-769473a23570?q=80&w=800&auto=format&fit=crop', description: 'La zapatilla más emblemática de New Balance.', gender: 'hombres', tags: ['urbana', 'clasicos'] },
+      { id: 'h5', title: 'Vans Old Skool Black', price: 74.99, thumbnail: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=800&auto=format&fit=crop', description: 'La zapatilla de skate clásica y duradera.', gender: 'hombres', tags: ['urbana', 'clasicos'] },
+      { id: 'h6', title: 'Nike Air Max 90', price: 139.99, thumbnail: 'https://images.unsplash.com/photo-1605348532760-6753d2c43329?q=80&w=800&auto=format&fit=crop', description: 'Amortiguación visible y estilo legendario.', gender: 'hombres', tags: ['urbana', 'running'] },
+      // --- MUJERES ---
+      { id: 'm1', title: 'Nike Blazer Mid 77', price: 104.99, thumbnail: 'https://images.unsplash.com/photo-1624225300667-562725953c4f?q=80&w=800&auto=format&fit=crop', description: 'Estilo vintage de baloncesto para el día a día.', gender: 'mujeres', tags: ['urbana', 'clasicos'] },
+      { id: 'm2', title: 'Converse Chuck 70 High', price: 89.99, thumbnail: 'https://images.unsplash.com/photo-1607522370955-614543300523?q=80&w=800&auto=format&fit=crop', description: 'Lona resistente y detalles de archivo.', gender: 'mujeres', tags: ['clasicos', 'urbana'] },
+      { id: 'm3', title: 'Adidas Ultraboost DNA', price: 189.99, thumbnail: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=800&auto=format&fit=crop', description: 'Retorno de energía increíble en cada paso.', gender: 'mujeres', tags: ['running'] },
+      { id: 'm4', title: 'Puma Cali Star', price: 84.99, thumbnail: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=800&auto=format&fit=crop', description: 'Estilo de la costa oeste con un toque moderno.', gender: 'mujeres', tags: ['urbana'] },
+      { id: 'm5', title: 'Reebok Club C 85', price: 79.99, thumbnail: 'https://images.unsplash.com/photo-1617612947796-0a6849047020?q=80&w=800&auto=format&fit=crop', description: 'Tenis minimalista con piel suave.', gender: 'mujeres', tags: ['clasicos'] },
+      // --- NIÑOS ---
+      { id: 'k1', title: 'Vans Sk8-Hi (Niños)', price: 54.99, thumbnail: 'https://images.unsplash.com/photo-1520256862855-398228c41684?q=80&w=800&auto=format&fit=crop', description: 'Legendaria caña alta para los más pequeños.', gender: 'ninos', tags: ['urbana', 'clasicos'] },
+      { id: 'k2', title: 'Nike Air Max 2090', price: 99.99, thumbnail: 'https://images.unsplash.com/photo-1556906781-9a412961c28c?q=80&w=800&auto=format&fit=crop', description: 'Futurismo y comodidad Air para jugar.', gender: 'ninos', tags: ['urbana', 'running'] },
+      { id: 'k3', title: 'Adidas Superstar Kids', price: 64.99, thumbnail: 'https://images.unsplash.com/photo-1518002171953-a080ee321e2f?q=80&w=800&auto=format&fit=crop', description: 'La puntera de goma favorita de todos.', gender: 'ninos', tags: ['clasicos', 'urbana'] }
+    ];
+
+    // --- CARGAR DATOS ---
+    function cargarDatos() {
+      const adminRaw = JSON.parse(localStorage.getItem('miwebzapatos_admin_products') || '[]');
+      const adminProds = adminRaw.map((p, i) => ({
+        id: 'admin-'+i, title: p.nombre, description: 'Exclusivo.', price: Number(p.precio), thumbnail: p.imagen, isAdmin: true, tags: ['urbana'] 
+      }));
+
+      const allShoes = [...adminProds, ...catalogoZapatos];
+
+      // Filtrar usando los tags de la nueva base de datos
+      colecciones.urbana = allShoes.filter(p => p.tags.includes('urbana'));
+      colecciones.running = allShoes.filter(p => p.tags.includes('running'));
+      colecciones.clasicos = allShoes.filter(p => p.tags.includes('clasicos'));
+      colecciones.basket = allShoes.filter(p => p.tags.includes('basket'));
+
+      render();
+    }
+
+    function filtrar(cat, btn) {
+      actual = cat;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      render();
+    }
+
+    function render() {
+      const grid = document.getElementById('grid-colecciones'); grid.innerHTML = '';
+      const lista = colecciones[actual] || [];
+
+      if(lista.length === 0) { grid.innerHTML = '<div class="no-results">No hay productos.</div>'; return; }
+
+      lista.forEach(p => {
+        const badge = p.isAdmin ? '<span style="position:absolute; top:15px; left:15px; background:var(--pri); color:white; font-size:10px; padding:4px 10px; border-radius:99px; font-weight:700; z-index:2; box-shadow:0 2px 5px rgba(0,0,0,0.2);">NUEVO</span>' : '';
+        
+        // --- ESTRUCTURA MAGIC CARD + BOTON GLOW ---
+        grid.innerHTML += `
+          <article class="card reveal show">
+            <div class="card-inner">
+              
+              <div class="card-img-wrap">
+                ${badge}
+                <img src="${p.thumbnail}" alt="${p.title}" onerror="this.src='https://via.placeholder.com/300'">
+              </div>
+
+              <div class="card-body">
+                <h3>${p.title}</h3>
+                <p>${(p.description||'').substring(0, 45)}...</p>
+                <span class="card-price">$${p.price.toFixed(2)}</span>
+                
+                <div class="card-actions">
+                  <button onclick="addToCart('${p.id}','${p.title.replace(/'/g,"")}',${p.price},'${p.thumbnail}')" class="btn-add">Agregar</button>
+                  <button onclick="showModal('${p.thumbnail}','${p.title.replace(/'/g,"")}','${(p.description||'').replace(/'/g,"")}',${p.price}, '${p.id}')" class="btn-link">Ver</button>
+                </div>
+              </div>
+
+            </div>
+          </article>
+        `;
+      });
+    }
+
+    function addToCart(id, title, price, img) {
+      const cart = JSON.parse(localStorage.getItem('miwebzapatos_cart') || '[]');
+      const existing = cart.find(i => i.id === id);
+      if(existing) existing.qty++; else cart.push({id, title, price, img, qty:1, size:'M'});
+      localStorage.setItem('miwebzapatos_cart', JSON.stringify(cart));
+      showToast();
+    }
+    
+    function showModal(img, tit, desc, price, id) {
+      const modal = document.getElementById('modalBox');
+      
+      document.getElementById('modalImg').src = img || 'https://via.placeholder.com/300';
+      document.getElementById('modalTitle').innerText = tit || 'Producto';
+      document.getElementById('modalDesc').innerText = desc || 'Excelente calidad.';
+      document.getElementById('modalPrice').textContent = '$'+price.toFixed(2);
+      
+      const btn = document.getElementById('modalAddBtn');
+      const newBtn = btn.cloneNode(true);
+      btn.parentNode.replaceChild(newBtn, btn);
+      
+      newBtn.onclick = () => { 
+        addToCart(id, tit, price, img); 
+        closeModal(); 
+      };
+      
+      modal.classList.add('active');
+    }
+    
+    function closeModal() { 
+      document.getElementById('modalBox').classList.remove('active'); 
+    }
+    window.onclick = function(e) {
+      const m = document.getElementById('modalBox');
+      if(e.target == m) closeModal();
+    }
+
+    cargarDatos();
+  </script>
+</body>
+</html>

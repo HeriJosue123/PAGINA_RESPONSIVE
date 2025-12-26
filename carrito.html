@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tu Carrito | MiWebZapatos</title>
+  <link rel="stylesheet" href="css/index.css">
+  <style>
+    /* --- ESTILOS CARRITO PREMIUM --- */
+    
+    .carrito-container { 
+      max-width: 1200px; margin: 40px auto; padding: 0 20px; 
+      display: grid; grid-template-columns: 1.6fr 1fr; gap: 40px; align-items: start; 
+    }
+    
+    /* TÍTULO CON DEGRADADO */
+    .page-title {
+      font-size: 2.5rem; margin-bottom: 30px; font-weight: 800; color: var(--text-title);
+    }
+    .page-title span {
+      background: linear-gradient(to right, #f7ba2b, #ea5358);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    /* --- ITEM DEL CARRITO (ESTILO MAGIC CARD HORIZONTAL) --- */
+    .cart-card-outer {
+      background: linear-gradient(to right, #f7ba2b, #ea5358); /* Borde mágico */
+      padding: 2px; border-radius: 20px; margin-bottom: 25px;
+      position: relative; transition: transform 0.3s;
+    }
+    .cart-card-outer:hover { transform: translateX(5px); }
+
+    .cart-item { 
+      background: var(--card-bg); border-radius: 18px; padding: 20px; 
+      display: flex; gap: 20px; align-items: center; 
+      position: relative; overflow: hidden;
+    }
+    
+    .item-img-box {
+      width: 100px; height: 100px; border-radius: 15px; 
+      background: rgba(0,0,0,0.03); display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .item-img { 
+      width: 100%; height: 100%; object-fit: contain; 
+      filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+    }
+    
+    .item-info { flex: 1; }
+    .item-info h3 { margin: 0 0 5px; font-size: 1.1rem; color: var(--text-title); font-weight: 700; }
+    .item-price { color: var(--pri); font-weight: 800; font-size: 1.2rem; }
+    
+    /* CONTROL DE CANTIDAD (ESTILIZADO) */
+    .qty-control { 
+      display: flex; gap: 15px; background: rgba(0,0,0,0.05); padding: 5px 15px; border-radius: 50px; 
+      align-items: center; border: 1px solid rgba(0,0,0,0.05);
+    }
+    .qty-btn { 
+      border: none; background: transparent; cursor: pointer; color: var(--text-main); 
+      font-size: 1.2rem; font-weight: bold; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; transition: 0.2s;
+    }
+    .qty-btn:hover { background: rgba(0,0,0,0.1); color: var(--pri); }
+    
+    .btn-delete {
+      border: none; background: rgba(239, 68, 68, 0.1); color: #ef4444; 
+      width: 35px; height: 35px; border-radius: 50%; cursor: pointer; 
+      font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
+      transition: 0.2s;
+    }
+    .btn-delete:hover { background: #ef4444; color: white; transform: rotate(90deg); }
+
+    /* --- RESUMEN DEL PEDIDO (TARJETA FLOTANTE) --- */
+    .summary-outer {
+      background: linear-gradient(135deg, #10b981, #059669); /* Borde verde neón */
+      padding: 3px; border-radius: 24px;
+      position: sticky; top: 100px;
+      box-shadow: 0 20px 50px rgba(16, 185, 129, 0.15);
+    }
+
+    .summary-card { 
+      background: var(--card-bg); 
+      border-radius: 21px; padding: 35px; 
+    }
+    
+    .summary-title { margin-top:0; color: var(--text-title); font-size: 1.5rem; margin-bottom: 25px; }
+
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 18px; color: var(--muted); font-size: 1rem; }
+    .summary-row strong { color: var(--text-title); }
+    
+    .total-row {
+      display: flex; justify-content: space-between; 
+      border-top: 2px dashed rgba(0,0,0,0.1); padding-top: 20px; margin-top: 20px; 
+      color: var(--text-title);
+    }
+    
+    /* BOTÓN NEÓN VERDE (IGUAL AL DE INICIO) */
+    .btn-checkout { 
+      width: 100%; padding: 18px; 
+      background: var(--pri); 
+      color: white; border: none; border-radius: 50px; 
+      font-size: 1.1rem; font-weight: 800; cursor: pointer; margin-top: 25px; 
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); 
+      transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px;
+      display: flex; justify-content: center; align-items: center; gap: 10px;
+    }
+    .btn-checkout:hover { 
+      background: transparent; color: var(--pri); border: 2px solid var(--pri);
+      box-shadow: 0 15px 35px rgba(16, 185, 129, 0.5); transform: translateY(-3px); 
+    }
+
+    /* ESTADO VACÍO */
+    .empty-msg { 
+      text-align: center; padding: 80px 20px; grid-column: 1 / -1; 
+      background: var(--card-bg); border-radius: 30px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    @media(max-width: 900px){ 
+      .carrito-container { grid-template-columns: 1fr; } 
+      .summary-outer { position: static; margin-top: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-wrap">
+      <div class="logo">
+        <div class="logo-icon">Z</div>
+        <div class="logo-text"><span class="logo-title">MiWebZapatos</span><span class="logo-sub">Store</span></div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="novedades.html">Novedades</a></li>
+          <li><a href="colecciones.html">Colecciones</a></li>
+          <li><a href="carrito.html" class="activo">Carrito</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+      <div class="nav-right">
+        <a href="perfil.html" class="btn-out" style="background:var(--card-bg); border-color:var(--pri); color:var(--pri); text-decoration:none;">
+          <span>👤</span> <span>Mi Perfil</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="carrito-container">
+      
+      <section>
+        <h1 class="page-title">Tu Carrito <span>de Compras</span></h1>
+        <div id="listaCarrito"></div>
+      </section>
+
+      <aside id="bloqueTotal" class="summary-outer" style="display:none;">
+        <div class="summary-card">
+          <h3 class="summary-title">Resumen del Pedido</h3>
+          
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <strong id="cartSubtotal">$0.00</strong>
+          </div>
+          <div class="summary-row">
+            <span>Envío estimado</span>
+            <strong>$4.90</strong>
+          </div>
+          <div class="summary-row" style="color:var(--pri); font-size:0.9rem;">
+            <span>Descuento</span>
+            <strong>-$0.00</strong>
+          </div>
+          
+          <div class="total-row">
+            <span style="font-weight:700; font-size:1.3rem;">Total</span>
+            <span id="cartTotal" style="font-size:1.8rem; font-weight:900; color:var(--text-title);">$0.00</span>
+          </div>
+          
+          <button id="btnPagar" class="btn-checkout">
+            PAGAR AHORA ➔
+          </button>
+          
+          <p style="text-align:center; font-size:0.85rem; color:var(--muted); margin-top:20px; display:flex; align-items:center; justify-content:center; gap:8px;">
+            🔒 Pago 100% Seguro y Encriptado
+          </p>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <footer><span>© 2025 MiWebZapatos.</span></footer>
+
+  <script src="auth.js"></script>
+  <script>
+    if(typeof requireAuth === 'function') requireAuth();
+    
+    // --- LÓGICA MODO OSCURO (Tu script original) ---
+    (function(){
+      const t = document.getElementById('neo-toggle'); 
+      const b = document.body;
+      if(localStorage.getItem('theme')==='dark'){ b.classList.add('dark-mode'); }
+    })();
+
+    const CART_KEY = 'miwebzapatos_cart';
+    const ENVIO = 4.90;
+
+    function renderCarrito(){
+      const cont = document.getElementById('listaCarrito');
+      const items = JSON.parse(localStorage.getItem(CART_KEY)||'[]');
+      cont.innerHTML = '';
+      
+      if(items.length === 0){
+        document.getElementById('bloqueTotal').style.display = 'none';
+        cont.innerHTML = `
+          <div class="empty-msg">
+            <h2 style="color:var(--text-title); font-size:2rem; margin-bottom:15px;">🛒 Tu carrito está vacío</h2>
+            <p style="color:var(--muted); font-size:1.1rem; margin-bottom:30px;">¡No dejes escapar tus favoritos! Explora lo nuevo.</p>
+            <a href="novedades.html" class="btn-checkout" style="max-width:250px; margin:0 auto; text-decoration:none;">
+              Ir a la tienda
+            </a>
+          </div>
+        `;
+        return;
+      }
+      
+      document.getElementById('bloqueTotal').style.display = 'block'; 
+      let sub = 0;
+      
+      items.forEach((item, idx) => {
+        sub += Number(item.price) * item.qty;
+        
+        cont.innerHTML += `
+          <div class="cart-card-outer">
+            <div class="cart-item">
+              
+              <div class="item-img-box">
+                <img src="${item.img}" class="item-img" onerror="this.src='https://via.placeholder.com/100'">
+              </div>
+              
+              <div class="item-info">
+                <h3>${item.title}</h3>
+                <div class="item-price">$${Number(item.price).toFixed(2)}</div>
+                <small style="color:var(--muted)">Talla: ${item.size || 'M'}</small>
+              </div>
+              
+              <div class="qty-control">
+                <button class="qty-btn" onclick="chQty(${idx},-1)">-</button>
+                <span style="font-weight:700; min-width:20px; text-align:center; color:var(--text-title);">${item.qty}</span>
+                <button class="qty-btn" onclick="chQty(${idx},1)">+</button>
+              </div>
+              
+              <button onclick="del(${idx})" class="btn-delete" title="Eliminar">&times;</button>
+              
+            </div>
+          </div>
+        `;
+      });
+      
+      document.getElementById('cartSubtotal').textContent = '$' + sub.toFixed(2);
+      document.getElementById('cartTotal').textContent = '$' + (sub + ENVIO).toFixed(2);
+    }
+
+    window.chQty = function(i, d){
+      const items = JSON.parse(localStorage.getItem(CART_KEY));
+      items[i].qty += d;
+      if(items[i].qty <= 0) items.splice(i,1);
+      localStorage.setItem(CART_KEY, JSON.stringify(items));
+      renderCarrito();
+    };
+    window.del = function(i){ chQty(i, -999); }
+
+    // --- AQUÍ ESTÁ EL ARREGLO PARA CONECTAR CON PAGO.HTML ---
+    document.getElementById('btnPagar').addEventListener('click', () => {
+      // 1. Revisar si hay items
+      const items = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+      if(items.length === 0) {
+        alert("El carrito está vacío");
+        return;
+      }
+
+      // 2. Guardar bandera
+      localStorage.setItem('miwebzapatos_fromCart', '1');
+      
+      // 3. REDIRIGIR A PAGO.HTML (Esto es lo que faltaba)
+      window.location.href = 'pago.html';
+    });
+    
+    renderCarrito();
+  </script>
+</body>
+</html>

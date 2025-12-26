@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Finalizar Compra | MiWebZapatos</title>
+  
+  <link rel="stylesheet" href="css/index.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* --- ESTILOS PAGO PREMIUM v3 (FIXED) --- */
+    body {
+      background: var(--bg-body); 
+      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      position: relative; overflow-x: hidden;
+      color: var(--text-main);
+      margin: 0;
+    }
+
+    /* Fondo animado */
+    .bg-shapes {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1;
+      margin: 0; padding: 0; pointer-events: none;
+    }
+    .bg-shapes li {
+      position: absolute; display: block; list-style: none;
+      width: 20px; height: 20px; background: var(--pri-soft);
+      animation: floatUp 20s linear infinite; bottom: -150px;
+      border-radius: 4px; backdrop-filter: blur(2px); opacity: 0.3;
+    }
+    .bg-shapes li:nth-child(1) { left: 10%; width: 80px; height: 80px; animation-delay: 0s; }
+    .bg-shapes li:nth-child(2) { left: 20%; width: 40px; height: 40px; animation-delay: 2s; }
+    .bg-shapes li:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+    @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 0.4; } 100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; } }
+
+    /* HEADER FIX (Centrado) */
+    header {
+      background: var(--glass-bg); backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-bottom: var(--glass-border);
+      position: relative; z-index: 10; width: 100%;
+    }
+    .nav-wrap {
+      max-width: 1150px; 
+      margin: 0 auto; 
+      padding: 15px 20px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+    }
+
+    main { max-width: 1150px; margin: 40px auto; padding: 0 20px; position: relative; z-index: 1; }
+
+    /* --- MAGIC BOXES --- */
+    .magic-box {
+      background: linear-gradient(135deg, #f7ba2b, #ea5358);
+      padding: 2px; border-radius: 24px; position: relative;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+    }
+    .magic-inner {
+      background: var(--card-bg); border-radius: 22px; padding: 35px;
+      height: 100%;
+    }
+
+    /* GRID LAYOUT */
+    .checkout-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; align-items: start; }
+
+    h2 { margin: 0 0 25px; color: var(--text-title); font-size: 1.4rem; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+    
+    /* --- TARJETA VISUAL --- */
+    .card-visual {
+      width: 100%; max-width: 380px; height: 220px; margin: 0 auto 30px;
+      background: linear-gradient(135deg, #1f2937, #111827);
+      border-radius: 20px; padding: 25px; color: white;
+      position: relative; overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+      display: flex; flex-direction: column; justify-content: space-between;
+      transition: transform 0.5s; perspective: 1000px;
+    }
+    .card-visual::before {
+      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); pointer-events: none;
+    }
+    .card-chip { width: 50px; height: 35px; background: linear-gradient(135deg, #ffd700, #b8860b); border-radius: 6px; margin-bottom: 20px; position: relative; z-index: 2; }
+    .card-number-display { font-size: 1.4rem; letter-spacing: 3px; font-family: monospace; text-shadow: 0 2px 4px rgba(0,0,0,0.5); z-index: 2; }
+    .card-details-row { display: flex; justify-content: space-between; font-size: 0.9rem; text-transform: uppercase; z-index: 2; margin-top: 20px; }
+    .card-label { font-size: 0.65rem; color: #aaa; display: block; margin-bottom: 2px; }
+
+    /* --- INPUTS --- */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    .form-group { margin-bottom: 25px; position: relative; }
+    
+    .input-line {
+      width: 100%; padding: 10px 0;
+      background: transparent; border: none;
+      border-bottom: 2px solid rgba(0,0,0,0.1);
+      font-size: 1rem; color: var(--text-main); font-family: inherit;
+      transition: 0.3s; outline: none; border-radius: 0;
+    }
+    .input-line:focus { border-color: var(--pri); padding-left: 5px; }
+    .input-line::placeholder { color: #aaa; transition: 0.3s; }
+    .input-line:focus::placeholder { opacity: 0.5; transform: translateX(5px); }
+    
+    label { font-size: 0.85rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* --- SELECTORES DE PAGO --- */
+    .payment-methods { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+    .pay-option input { display: none; }
+    .pay-option label {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+      border: 2px solid transparent; border-radius: 16px; padding: 15px; cursor: pointer;
+      background: rgba(0,0,0,0.03); transition: 0.3s; height: 100%; color: var(--text-main);
+      position: relative; overflow: hidden;
+    }
+    .pay-option label:hover { background: rgba(0,0,0,0.06); }
+    .pay-option input:checked + label {
+      border-color: #10b981; background: rgba(16, 185, 129, 0.08); color: var(--pri-dark); font-weight: 700;
+      box-shadow: 0 5px 15px rgba(16, 185, 129, 0.15);
+    }
+    .pay-icon { font-size: 1.8rem; margin-bottom: 5px; }
+
+    /* --- CONTENEDORES DE PAGO (PayPal y Efectivo) --- */
+    #paypal-area, #cash-area { animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .btn-paypal-dummy {
+      background: #0070ba; color: white; border: none; padding: 15px; width: 100%; border-radius: 12px;
+      font-weight: 700; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+      box-shadow: 0 5px 15px rgba(0, 112, 186, 0.3); transition: 0.3s;
+    }
+    .btn-paypal-dummy:hover { background: #005ea6; transform: translateY(-2px); }
+
+    .cash-info-box {
+      text-align: center; padding: 30px; background: rgba(16, 185, 129, 0.08); 
+      border: 2px dashed #10b981; border-radius: 16px; color: var(--text-main);
+    }
+
+    /* --- RESUMEN --- */
+    .summary-sticky { position: sticky; top: 100px; }
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 1rem; color: var(--muted); }
+    .summary-total {
+      display: flex; justify-content: space-between; margin-top: 25px; padding-top: 25px;
+      border-top: 2px dashed rgba(0,0,0,0.1); font-weight: 900; font-size: 1.6rem; color: var(--text-title);
+    }
+    .product-mini { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.05); }
+    .product-mini img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; background: #eee; }
+
+    .btn-pay {
+      width: 100%; padding: 18px; border-radius: 50px; border: none;
+      background: var(--pri); color: white; font-weight: 800; font-size: 1.1rem;
+      cursor: pointer; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+      transition: 0.3s; margin-top: 30px; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .btn-pay:hover { background: transparent; border: 2px solid var(--pri); color: var(--pri); transform: translateY(-3px); }
+
+    /* TOAST */
+    .toast-success {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999; opacity: 0; pointer-events: none; transition: 0.5s;
+    }
+    .toast-success.active { opacity: 1; pointer-events: all; }
+    .toast-card {
+      background: var(--card-bg); padding: 50px; border-radius: 30px; text-align: center;
+      transform: scale(0.8); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      max-width: 450px; width: 90%; box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+    }
+    .toast-success.active .toast-card { transform: scale(1); }
+    .check-icon { font-size: 50px; color: #10b981; margin-bottom: 20px; display: block; }
+
+    @media(max-width: 900px){ .checkout-grid { grid-template-columns: 1fr; } .card-visual {width: 100%;} }
+  </style>
+</head>
+<body>
+
+  <ul class="bg-shapes"><li></li><li></li><li></li><li></li></ul>
+
+  <header>
+    <div class="nav-wrap">
+      <div class="logo">
+        <div class="logo-icon">Z</div>
+        <div class="logo-text"><span class="logo-title">MiWebZapatos</span></div>
+      </div>
+      <div class="nav-right">
+        <a href="carrito.html" class="btn-out" style="border:none; color: var(--danger); font-weight:600;">Cancelar Compra</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="checkout-grid">
+      
+      <div class="left-col">
+        
+        <div class="magic-box" style="margin-bottom: 30px;">
+          <div class="magic-inner">
+            <h2><span>📍</span> Dirección de Envío</h2>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Nombre Completo</label>
+                <input type="text" id="name" class="input-line" placeholder="Juan Pérez">
+              </div>
+              <div class="form-group">
+                <label>Teléfono</label>
+                <input type="tel" id="phone" class="input-line" placeholder="+503 ...">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Dirección Exacta</label>
+              <input type="text" id="address" class="input-line" placeholder="Colonia, Calle, #Casa...">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>País</label>
+                <select id="country" class="input-line">
+                  <option>El Salvador</option><option>Guatemala</option><option>México</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Departamento</label>
+                <input type="text" id="state" class="input-line" placeholder="San Salvador">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="magic-box">
+          <div class="magic-inner">
+            <h2><span>💳</span> Método de Pago</h2>
+            
+            <div class="payment-methods">
+              <div class="pay-option">
+                <input type="radio" name="payment" id="pay-card" value="card" checked>
+                <label for="pay-card"><span class="pay-icon">💳</span> Tarjeta</label>
+              </div>
+              <div class="pay-option">
+                <input type="radio" name="payment" id="pay-paypal" value="paypal">
+                <label for="pay-paypal"><span class="pay-icon">🅿️</span> PayPal</label>
+              </div>
+              <div class="pay-option">
+                <input type="radio" name="payment" id="pay-cash" value="cash">
+                <label for="pay-cash"><span class="pay-icon">💵</span> Efectivo</label>
+              </div>
+            </div>
+
+            <div id="card-area">
+              <div class="card-visual">
+                <div style="display:flex; justify-content:space-between; align-items:start;">
+                  <div class="card-chip"></div>
+                  <span style="font-size:1.2rem; font-weight:800; font-style:italic; opacity:0.8;">VISA</span>
+                </div>
+                <div class="card-number-display" id="visual-num">#### #### #### ####</div>
+                <div class="card-details-row">
+                  <div><span class="card-label">TITULAR</span><span id="visual-name">NOMBRE APELLIDO</span></div>
+                  <div><span class="card-label">EXPIRA</span><span id="visual-exp">MM/AA</span></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Número de Tarjeta</label>
+                <input type="text" id="cc-num" class="input-line" placeholder="0000 0000 0000 0000" maxlength="19">
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Titular</label><input type="text" id="cc-name" class="input-line" placeholder="Nombre en plástico"></div>
+                <div class="form-group"><label>Vence</label><input type="text" id="cc-exp" class="input-line" placeholder="MM/AA" maxlength="5"></div>
+              </div>
+              <div class="form-group" style="max-width:150px;"><label>CVV</label><input type="text" id="cc-cvv" class="input-line" placeholder="123" maxlength="4"></div>
+            </div>
+
+            <div id="paypal-area" style="display:none; padding: 10px 0;">
+              <p style="margin-bottom: 20px; color: var(--muted); text-align: center;">Serás redirigido a PayPal para completar tu compra de forma segura.</p>
+              <button class="btn-paypal-dummy">
+                <i style="font-style:normal; font-size:1.2rem;">🅿️</i> Pagar con PayPal
+              </button>
+            </div>
+
+            <div id="cash-area" style="display:none; padding: 10px 0;">
+              <div class="cash-info-box">
+                <div style="font-size: 2.5rem; margin-bottom: 10px;">🚚💵</div>
+                <h3 style="margin: 0; color: #10b981;">Pago Contra Entrega</h3>
+                <p style="margin-top: 10px; font-size: 0.9rem;">Pagas en efectivo al repartidor cuando recibas tu pedido en la puerta de tu casa.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div> 
+
+      <aside class="summary-sticky">
+        <div class="magic-box" style="background: linear-gradient(135deg, #10b981, #059669);"> 
+          <div class="magic-inner">
+            <h3 style="margin-top:0; font-size:1.5rem; color:var(--text-title);">Tu Pedido</h3>
+            <div id="mini-cart-list" style="margin-bottom:20px; max-height:250px; overflow-y:auto;"></div>
+            <div class="summary-row"><span>Subtotal</span><strong id="sum-sub">$0.00</strong></div>
+            <div class="summary-row"><span>Envío</span><strong>$4.90</strong></div>
+            <div class="summary-total"><span>Total</span><span id="sum-total" style="color:#10b981;">$0.00</span></div>
+            <button id="btn-confirm" class="btn-pay">CONFIRMAR COMPRA ➔</button>
+            <div style="text-align:center; margin-top:20px; font-size:0.8rem; color:var(--muted); opacity:0.8;">🔒 Tus datos están protegidos.</div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <footer><span>© 2025 MiWebZapatos.</span></footer>
+
+  <div id="successToast" class="toast-success">
+    <div class="toast-card">
+      <span class="check-icon">✨</span>
+      <h2 style="color:var(--text-title); margin-bottom:10px;">¡Pago Exitoso!</h2>
+      <p style="color:var(--muted);">Tu pedido ha sido procesado correctamente. Te hemos enviado un correo con los detalles.</p>
+      <div style="margin-top:25px; color:var(--pri); font-weight:700;">Redirigiendo a la tienda...</div>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script src="theme.js"></script>
+  <script>
+    if(typeof requireAuth === 'function') requireAuth();
+    (function(){ const b = document.body; if(localStorage.getItem('theme')==='dark'){ b.classList.add('dark-mode'); } })();
+
+    const CART_KEY = 'miwebzapatos_cart';
+    const ENVIO = 4.90;
+
+    // --- INTERACTIVIDAD TARJETA VISUAL ---
+    const ccNum = document.getElementById('cc-num');
+    const ccName = document.getElementById('cc-name');
+    const ccExp = document.getElementById('cc-exp');
+    const visNum = document.getElementById('visual-num');
+    const visName = document.getElementById('visual-name');
+    const visExp = document.getElementById('visual-exp');
+
+    ccNum.addEventListener('input', (e) => {
+      let val = e.target.value.replace(/\D/g, '').substring(0,16);
+      e.target.value = val.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
+      visNum.textContent = e.target.value || '#### #### #### ####';
+    });
+    ccName.addEventListener('input', (e) => { visName.textContent = e.target.value.toUpperCase() || 'NOMBRE APELLIDO'; });
+    ccExp.addEventListener('input', (e) => {
+      let val = e.target.value.replace(/\D/g, '').substring(0,4);
+      if(val.length >= 3) val = val.substring(0,2) + '/' + val.substring(2);
+      e.target.value = val;
+      visExp.textContent = val || 'MM/AA';
+    });
+
+    // --- CAMBIAR MÉTODO DE PAGO ---
+    const radios = document.querySelectorAll('input[name="payment"]');
+    const areas = {
+      card: document.getElementById('card-area'),
+      paypal: document.getElementById('paypal-area'),
+      cash: document.getElementById('cash-area')
+    };
+
+    radios.forEach(r => {
+      r.addEventListener('change', () => {
+        // Ocultar todos primero
+        Object.values(areas).forEach(el => el.style.display = 'none');
+        // Mostrar el seleccionado
+        if(areas[r.value]) {
+          areas[r.value].style.display = 'block';
+        }
+      });
+    });
+
+    // --- CARGAR PEDIDO ---
+    function loadOrder(){
+      let items = [];
+      const fromCart = localStorage.getItem('miwebzapatos_fromCart');
+      if(fromCart) items = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+
+      if(items.length === 0) {
+        alert("Carrito vacío"); window.location.href = "index.html"; return;
+      }
+
+      const container = document.getElementById('mini-cart-list');
+      let subtotal = 0;
+      container.innerHTML = '';
+      
+      items.forEach(item => {
+        subtotal += Number(item.price) * (item.qty || 1);
+        container.innerHTML += `
+          <div class="product-mini">
+            <img src="${item.img}" onerror="this.src='https://via.placeholder.com/50'">
+            <div>
+              <div style="font-weight:700; color:var(--text-title);">${item.title}</div>
+              <div style="font-size:0.85rem; color:var(--muted);">$${item.price} x ${item.qty||1}</div>
+            </div>
+          </div>
+        `;
+      });
+      document.getElementById('sum-sub').textContent = '$' + subtotal.toFixed(2);
+      document.getElementById('sum-total').textContent = '$' + (subtotal + ENVIO).toFixed(2);
+    }
+
+    // --- CONFIRMAR PAGO ---
+    document.getElementById('btn-confirm').addEventListener('click', () => {
+      const selectedPayment = document.querySelector('input[name="payment"]:checked').value;
+      
+      // Validación solo si es tarjeta
+      if(selectedPayment === 'card') {
+        const req = ['name', 'phone', 'address', 'cc-num'];
+        let valid = true;
+        req.forEach(id => {
+          const el = document.getElementById(id);
+          if(!el.value.trim()){ el.style.borderBottom = "2px solid #ef4444"; valid=false; }
+          else el.style.borderBottom = "2px solid rgba(0,0,0,0.1)";
+        });
+        if(!valid) return;
+      } else {
+        // Validación básica de envío para PayPal/Efectivo
+        const req = ['name', 'phone', 'address'];
+        let valid = true;
+        req.forEach(id => {
+          const el = document.getElementById(id);
+          if(!el.value.trim()){ el.style.borderBottom = "2px solid #ef4444"; valid=false; }
+          else el.style.borderBottom = "2px solid rgba(0,0,0,0.1)";
+        });
+        if(!valid) return;
+      }
+
+      const btn = document.getElementById('btn-confirm');
+      btn.textContent = 'Procesando...';
+      btn.style.opacity = '0.7';
+
+      setTimeout(() => {
+        document.getElementById('successToast').classList.add('active');
+        setTimeout(() => {
+          localStorage.removeItem(CART_KEY);
+          localStorage.removeItem('miwebzapatos_fromCart');
+          window.location.href = 'index.html';
+        }, 3000);
+      }, 2000);
+    });
+
+    loadOrder();
+  </script>
+</body>
+</html>
