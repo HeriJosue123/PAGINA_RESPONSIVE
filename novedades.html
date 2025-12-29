@@ -250,7 +250,9 @@
         <button class="shoetab-btn" onclick="cambiarSeccion('ninos')">Niños</button>
       </div>
 
-      <div class="grid" id="grid-novedades"></div>
+      <div class="grid" id="grid-novedades">
+        <p style="text-align:center; width:100%; grid-column:1/-1;">Cargando productos de la base de datos...</p>
+      </div>
       
       <div class="pagebar" id="pagebar"></div>
     </section>
@@ -279,6 +281,7 @@
       setTimeout(() => toast.classList.remove('active'), 3000);
     }
 
+    // --- CARGAR PRODUCTOS LOCALES DEL ADMIN (OPCIONAL) ---
     function getAdminProducts() {
       try { return JSON.parse(localStorage.getItem('miwebzapatos_admin_products')) || []; } 
       catch (e) { return []; }
@@ -291,43 +294,70 @@
       description: 'Producto exclusivo añadido recientemente.',
       price: parseFloat(p.precio),
       thumbnail: p.imagen || 'https://via.placeholder.com/300x300?text=Sin+Imagen',
-      isAdmin: true
+      isAdmin: true,
+      gender: 'hombres' // Por defecto
     }));
 
-    // --- BASE DE DATOS LOCAL CORREGIDA ---
-    const catalogoZapatos = [
-      // --- HOMBRES ---
-      { id: 'h1', title: 'Nike Air Force 1 White', price: 119.99, thumbnail: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=800&auto=format&fit=crop', description: 'El clásico indiscutible. Diseño limpio y atemporal.', gender: 'hombres', tags: ['urbana', 'clasicos'] },
-      { id: 'h2', title: 'Air Jordan 1 High OG', price: 179.99, thumbnail: 'https://images.unsplash.com/photo-1613673720434-a6f111296d86?q=80&w=800&auto=format&fit=crop', description: 'Icono del baloncesto con colores retro premium.', gender: 'hombres', tags: ['clasicos', 'basket'] },
-      { id: 'h3', title: 'Adidas Forum Low', price: 109.99, thumbnail: 'https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?q=80&w=800&auto=format&fit=crop', description: 'Estilo de los 80 revivido para las calles de hoy.', gender: 'hombres', tags: ['urbana', 'basket'] },
-      { id: 'h4', title: 'New Balance 574 Core', price: 89.99, thumbnail: 'https://images.unsplash.com/photo-1539185441755-769473a23570?q=80&w=800&auto=format&fit=crop', description: 'La zapatilla más emblemática de New Balance.', gender: 'hombres', tags: ['urbana', 'clasicos'] },
-      { id: 'h5', title: 'Vans Old Skool Black', price: 74.99, thumbnail: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=800&auto=format&fit=crop', description: 'La zapatilla de skate clásica y duradera.', gender: 'hombres', tags: ['urbana', 'clasicos'] },
-      { id: 'h6', title: 'Nike Air Max 90', price: 139.99, thumbnail: 'https://images.unsplash.com/photo-1605348532760-6753d2c43329?q=80&w=800&auto=format&fit=crop', description: 'Amortiguación visible y estilo legendario.', gender: 'hombres', tags: ['urbana', 'running'] },
-      // --- MUJERES ---
-      { id: 'm1', title: 'Nike Blazer Mid 77', price: 104.99, thumbnail: 'https://images.unsplash.com/photo-1624225300667-562725953c4f?q=80&w=800&auto=format&fit=crop', description: 'Estilo vintage de baloncesto para el día a día.', gender: 'mujeres', tags: ['urbana', 'clasicos'] },
-      { id: 'm2', title: 'Converse Chuck 70 High', price: 89.99, thumbnail: 'https://images.unsplash.com/photo-1607522370955-614543300523?q=80&w=800&auto=format&fit=crop', description: 'Lona resistente y detalles de archivo.', gender: 'mujeres', tags: ['clasicos', 'urbana'] },
-      { id: 'm3', title: 'Adidas Ultraboost DNA', price: 189.99, thumbnail: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=800&auto=format&fit=crop', description: 'Retorno de energía increíble en cada paso.', gender: 'mujeres', tags: ['running'] },
-      { id: 'm4', title: 'Puma Cali Star', price: 84.99, thumbnail: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=800&auto=format&fit=crop', description: 'Estilo de la costa oeste con un toque moderno.', gender: 'mujeres', tags: ['urbana'] },
-      { id: 'm5', title: 'Reebok Club C 85', price: 79.99, thumbnail: 'https://images.unsplash.com/photo-1617612947796-0a6849047020?q=80&w=800&auto=format&fit=crop', description: 'Tenis minimalista con piel suave.', gender: 'mujeres', tags: ['clasicos'] },
-      // --- NIÑOS ---
-      { id: 'k1', title: 'Vans Sk8-Hi (Niños)', price: 54.99, thumbnail: 'https://images.unsplash.com/photo-1520256862855-398228c41684?q=80&w=800&auto=format&fit=crop', description: 'Legendaria caña alta para los más pequeños.', gender: 'ninos', tags: ['urbana', 'clasicos'] },
-      { id: 'k2', title: 'Nike Air Max 2090', price: 99.99, thumbnail: 'https://images.unsplash.com/photo-1556906781-9a412961c28c?q=80&w=800&auto=format&fit=crop', description: 'Futurismo y comodidad Air para jugar.', gender: 'ninos', tags: ['urbana', 'running'] },
-      { id: 'k3', title: 'Adidas Superstar Kids', price: 64.99, thumbnail: 'https://images.unsplash.com/photo-1518002171953-a080ee321e2f?q=80&w=800&auto=format&fit=crop', description: 'La puntera de goma favorita de todos.', gender: 'ninos', tags: ['clasicos', 'urbana'] }
-    ];
+    // --- AQUÍ ESTÁ EL CAMBIO: ARRAY VACÍO Y CONEXIÓN A BASE DE DATOS ---
+    let catalogoZapatos = []; // Empezamos vacío hasta que la DB responda
 
     let productosAll = { hombres:[], mujeres:[], ninos:[] };
     let seccionActual = 'hombres';
     const porPag = 6;
     let paginaActual = 0;
 
+    // --- FUNCIÓN QUE CONECTA CON NETLIFY Y NEON ---
+    async function cargarBaseDeDatos() {
+      try {
+        console.log("Conectando a la base de datos...");
+        const response = await fetch('/.netlify/functions/api-zapatos');
+        
+        if (!response.ok) throw new Error("Error en la red");
+        
+        const datosDB = await response.json();
+        console.log("Datos recibidos:", datosDB);
+
+        // Convertimos los datos de la DB al formato de tu página
+        catalogoZapatos = datosDB.map(zapato => ({
+            id: zapato.id,
+            title: zapato.nombre, // En tu DB es 'nombre', en el HTML usamos 'title'
+            price: parseFloat(zapato.precio),
+            thumbnail: zapato.imagen, // En tu DB es 'imagen'
+            description: zapato.descripcion || 'Estilo y calidad premium.', // Usamos descripción o una por defecto
+            gender: normalizarCategoria(zapato.categoria) // Convertimos 'Hombres' a 'hombres'
+        }));
+
+        // Una vez cargados, iniciamos la vista
+        initData();
+
+      } catch (error) {
+        console.error("Error cargando zapatos:", error);
+        document.getElementById('grid-novedades').innerHTML = 
+            '<div class="no-products text-danger">Error conectando con la base de datos :(</div>';
+      }
+    }
+
+    // Función auxiliar para que las categorías coincidan con tus botones
+    function normalizarCategoria(cat) {
+        if(!cat) return 'hombres';
+        const c = cat.toLowerCase();
+        if(c.includes('niñ') || c.includes('nino')) return 'ninos';
+        if(c.includes('mujer') || c.includes('dama')) return 'mujeres';
+        return 'hombres';
+    }
+
     function initData() {
+      // Combinamos productos locales (admin) + base de datos
       productosAll.hombres = [...adminProductsFormatted, ...catalogoZapatos.filter(p => p.gender === 'hombres')];
       productosAll.mujeres = catalogoZapatos.filter(p => p.gender === 'mujeres');
       productosAll.ninos = catalogoZapatos.filter(p => p.gender === 'ninos');
+      
       renderProductos();
       renderPaginado();
     }
-    initData();
+
+    // LLAMAMOS A LA DB AL CARGAR LA PÁGINA
+    cargarBaseDeDatos();
 
     function cambiarSeccion(sec) {
       seccionActual = sec;
@@ -348,7 +378,7 @@
       const lista = productosAll[seccionActual];
       
       if (!lista || lista.length === 0) {
-        grid.innerHTML = '<div class="no-products">No hay productos disponibles.</div>';
+        grid.innerHTML = '<div class="no-products">No hay productos disponibles en esta categoría.</div>';
         return;
       }
 
@@ -364,7 +394,7 @@
 
         const badgeHTML = p.isAdmin ? `<span style="position:absolute; top:10px; left:10px; background:var(--pri); color:white; font-size:10px; padding:4px 10px; border-radius:99px; font-weight:700; z-index:2; box-shadow:0 2px 5px rgba(0,0,0,0.2);">NUEVO</span>` : '';
 
-        // --- BOTÓN AGREGAR CON NUEVA CLASE 'btn-add' QUE TIENE EL EFECTO GLOW ---
+        // --- RENDERIZADO ---
         grid.innerHTML += `
           <article class="card reveal show">
             <div class="card-inner">
