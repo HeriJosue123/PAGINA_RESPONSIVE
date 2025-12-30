@@ -1,0 +1,41 @@
+import { Client } from 'pg';
+
+const connectionString = 'postgresql://neondb_owner:npg_H6X4FlqKvxSj@ep-plain-brook-aem3qfgr-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require';
+
+export default async function handler(req, res) {
+  // 1. CORS (Permisos)
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
+  const client = new Client({ connectionString });
+
+  try {
+    // Vercel parsea el body automáticamente, pero a veces viene como string si se envía raro.
+    // Por seguridad, intentamos leerlo directo.
+    const { id } = req.body; 
+
+    await client.connect();
+
+    const query = 'DELETE FROM productos WHERE id = $1 RETURNING *';
+    const result = await client.query(query, [id]);
+    
+    await client.end();
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "No se encontró ese zapato" });
+    }
+
+    return res.status(200).json({ message: "Eliminado correctamente", eliminado: result.rows[0] });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error.message });
+  }
+}
