@@ -105,11 +105,17 @@
   </div>
 
   <script>
-    // 1. CARGAR LISTA AL ENTRAR
+    // 🔒 SEGURIDAD: Verificar si es admin
+    if (localStorage.getItem('es_admin') !== 'true') {
+      window.location.href = 'login.html';
+    }
+
+    // 1. CARGAR LISTA AL ENTRAR (Ruta arreglada para Vercel)
     async function cargarInventario() {
       const lista = document.getElementById('lista-inventario');
       try {
-        const res = await fetch('https://hype-locker.netlify.app/.netlify/functions/api-zapatos');
+        // 🔥 CAMBIO AQUÍ: Usamos /api/
+        const res = await fetch('/api/api-zapatos');
         const zapatos = await res.json();
         
         lista.innerHTML = ''; // Limpiar
@@ -131,6 +137,7 @@
         });
       } catch (e) {
         lista.innerHTML = '<p style="color:red">Error cargando lista</p>';
+        console.error(e);
       }
     }
 
@@ -155,7 +162,8 @@
       btn.disabled = true; btn.textContent = "Guardando...";
       
       try {
-        await fetch('/.netlify/functions/agregar-zapato', {
+        // 🔥 CAMBIO AQUÍ: Usamos /api/
+        await fetch('/api/agregar-zapato', {
           method: 'POST', body: JSON.stringify(data)
         });
         msg.textContent = "✅ Guardado!";
@@ -169,6 +177,7 @@
 
       } catch (e) {
         msg.textContent = "❌ Error";
+        console.error(e);
       }
       btn.disabled = false; btn.textContent = "GUARDAR EN LA NUBE";
     }
@@ -178,9 +187,11 @@
       if(!confirm("¿Seguro que quieres eliminar este producto para siempre?")) return;
 
       try {
-        const res = await fetch('/.netlify/functions/eliminar-zapato', {
+        // 🔥 CAMBIO AQUÍ: Usamos /api/
+        const res = await fetch('/api/eliminar-zapato', {
           method: 'POST',
-          body: JSON.stringify({ id: id })
+          body: JSON.stringify({ id: id }),
+          headers: { 'Content-Type': 'application/json' }
         });
 
         if(res.ok) {
