@@ -110,11 +110,10 @@
       window.location.href = 'login.html';
     }
 
-    // 1. CARGAR LISTA AL ENTRAR (Ruta arreglada para Vercel)
+    // 1. CARGAR LISTA AL ENTRAR
     async function cargarInventario() {
       const lista = document.getElementById('lista-inventario');
       try {
-        // 🔥 CAMBIO AQUÍ: Usamos /api/
         const res = await fetch('/api/api-zapatos');
         const zapatos = await res.json();
         
@@ -162,10 +161,15 @@
       btn.disabled = true; btn.textContent = "Guardando...";
       
       try {
-        // 🔥 CAMBIO AQUÍ: Usamos /api/
+        // 🔥 AQUÍ ESTÁ EL ARREGLO QUE FALTABA
         await fetch('/api/agregar-zapato', {
-          method: 'POST', body: JSON.stringify(data)
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json' // <--- ESTO FALTABA
+          },
+          body: JSON.stringify(data)
         });
+
         msg.textContent = "✅ Guardado!";
         msg.className = "status success";
         // Limpiar inputs
@@ -187,7 +191,6 @@
       if(!confirm("¿Seguro que quieres eliminar este producto para siempre?")) return;
 
       try {
-        // 🔥 CAMBIO AQUÍ: Usamos /api/
         const res = await fetch('/api/eliminar-zapato', {
           method: 'POST',
           body: JSON.stringify({ id: id }),
