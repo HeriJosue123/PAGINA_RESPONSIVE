@@ -4,9 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   
-  <title>Hype Locker | Streetwear Exclusivo</title>
+  <title>Street Kingz | Urban Style</title>
   
-  <meta property="og:title" content="Hype Locker | Streetwear Exclusivo" />
+  <meta property="og:title" content="Street Kingz | Urban Style" />
   <meta property="og:description" content="Descubre la nueva colección 2026. Tenis exclusivos, modo oscuro y experiencia 3D. ¡Entra ya!" />
   <meta property="og:image" content="https://hype-locker.netlify.app/preview.jpg" />
   <meta property="og:url" content="https://hype-locker.netlify.app/" />
@@ -226,19 +226,68 @@
         align-items: center;
     }
 
+    /* --- 👑 PARCHE MÓVIL STREET KINGZ --- */
+    @media (max-width: 768px) {
+      /* 1. Contenedor principal en columna */
+      .nav-wrap {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 10px;
+        height: auto;
+      }
+      
+      header { height: auto; min-height: auto; }
+
+      /* 2. Logo centrado y grande */
+      .logo {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 5px;
+      }
+      .logo-title { font-size: 1.6rem; }
+
+      /* 3. Menú (Inicio, Novedades...) centrado */
+      nav { width: 100%; }
+      nav ul {
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap; /* Bajar si no caben */
+        padding: 0;
+      }
+      nav ul li a {
+        font-size: 0.85rem;
+        padding: 6px 10px;
+        background: rgba(255,255,255,0.05); /* Fondo suave en botones */
+        border-radius: 5px;
+      }
+
+      /* 4. Perfil y Switch ordenados al final */
+      .nav-right {
+        width: 100%;
+        justify-content: center;
+        margin-top: 5px;
+        gap: 20px;
+      }
+      
+      /* Ajuste del switch */
+      .neo-toggle-container { transform: scale(0.65); }
+    }
+
   </style>
 </head>
 <body>
 
   <header>
     <div class="nav-wrap">
+      
       <div class="logo">
-        <div class="logo-icon">Z</div>
+        <div class="logo-icon" style="background: var(--pri); color: #000;">👑</div>
         <div class="logo-text">
-          <span class="logo-title">MiWebZapatos</span>
-          <span class="logo-sub">Store</span>
+          <span class="logo-title" style="text-transform: uppercase; letter-spacing: 1px;">Street Kingz</span>
+          <span class="logo-sub">Urban Style</span>
         </div>
       </div>
+
       <nav>
         <ul>
           <li><a href="index.html" class="activo">Inicio</a></li>
@@ -358,7 +407,7 @@
   </main>
 
   <footer>
-    <span>© 2025 MiWebZapatos. Todos los derechos reservados.</span>
+    <span>© 2025 Street Kingz. Todos los derechos reservados.</span>
   </footer>
 
   <script src="auth.js"></script>
