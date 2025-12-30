@@ -1343,41 +1343,43 @@ footer { text-align: center; padding: 20px; color: var(--muted); font-size: 0.8r
 }
 
 /* =========================================
-   11. PARCHE DE EMERGENCIA MÓVIL (NUCLEAR FIX) ☢️
+   11. PARCHE MAESTRO RESPONSIVE (TABLET Y MÓVIL) ☢️
    ========================================= */
-@media (max-width: 768px) {
+/* 🔥 CAMBIO CLAVE: Aumentamos a 1024px para que agarre tablets y ventanas pequeñas de PC */
+@media (max-width: 1024px) {
   
-  /* Forzamos al Header a crecer */
+  /* 1. Header se adapta */
   header {
     height: auto !important;
     min-height: auto !important;
-    padding: 15px 0 !important;
+    padding: 10px 0 !important;
     background: var(--card-bg) !important;
+    position: relative !important;
   }
 
-  /* Contenedor en COLUMNA estricta */
+  /* 2. Contenedor en COLUMNA VERTICAL */
   .nav-wrap {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: flex-start !important;
-    gap: 20px !important;
+    gap: 15px !important;
     height: auto !important;
     width: 100% !important;
+    padding: 15px !important;
   }
 
-  /* 1️⃣ EL LOGO VA PRIMERO (Arriba) */
+  /* 3. LOGO: El Rey va PRIMERO y bien visible 👑 */
   .logo {
-    order: 1 !important; /* <--- Esto obliga a ir primero */
+    order: 1 !important;
     width: 100% !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     margin-bottom: 5px !important;
-    transform: scale(1.1);
+    transform: scale(1.1); /* Un poco más grande */
   }
   
-  /* Asegurar que el texto del logo se vea bien */
   .logo-text {
     display: flex;
     flex-direction: column;
@@ -1385,53 +1387,61 @@ footer { text-align: center; padding: 20px; color: var(--muted); font-size: 0.8r
     margin-left: 10px;
   }
 
-  /* 2️⃣ EL MENÚ VA SEGUNDO (En medio) */
+  /* 4. MENÚ: Va SEGUNDO, centrado y ordenado */
   nav {
-    order: 2 !important; /* <--- Esto obliga a ir segundo */
+    order: 2 !important;
     width: 100% !important;
     margin: 0 !important;
   }
   
   nav ul {
     display: flex !important;
-    flex-wrap: wrap !important;
+    flex-wrap: wrap !important; /* Si no caben, bajan a otra línea */
     justify-content: center !important;
-    gap: 8px !important;
+    gap: 10px !important;
     padding: 0 !important;
     width: 100% !important;
   }
   
-  /* Botones estilo chip para el menú */
+  /* Botones estilo chip (redonditos) */
   nav ul li a {
-    display: block;
-    padding: 8px 14px;
-    background: rgba(128, 128, 128, 0.08);
-    border-radius: 20px;
-    font-size: 0.85rem;
-    white-space: nowrap; /* Que no se parta el texto */
+    display: block !important;
+    padding: 8px 16px !important;
+    background: rgba(128, 128, 128, 0.08) !important;
+    border-radius: 25px !important;
+    font-size: 0.85rem !important;
+    white-space: nowrap !important; /* Texto en una sola línea */
+    border: 1px solid rgba(0,0,0,0.05) !important;
+  }
+  
+  nav ul li a.activo {
+    background: var(--pri) !important;
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3) !important;
   }
 
-  /* 3️⃣ EL PERFIL VA TERCERO (Abajo) */
+  /* 5. PERFIL Y SWITCH: Van TERCEROS (al final) */
   .nav-right {
-    order: 3 !important; /* <--- Esto obliga a ir al final */
+    order: 3 !important;
     width: 100% !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     gap: 20px !important;
-    margin-top: 10px !important;
-    border-top: 1px solid rgba(0,0,0,0.05); /* Línea divisora */
+    margin-top: 5px !important;
     padding-top: 15px !important;
+    border-top: 1px solid rgba(128,128,128,0.1) !important; /* Línea divisoria suave */
   }
 
-  /* Ajuste del botón perfil y switch */
+  /* Ajuste del botón perfil */
   .btn-out {
      width: auto !important;
-     min-width: 120px;
+     min-width: 140px; /* Un tamaño decente para el dedo */
   }
   
+  /* Ajuste del Switch Neo para que no sea gigante */
   .neo-toggle-container {
-    transform: scale(0.7) !important;
+    transform: scale(0.75) !important;
     margin: 0 !important;
   }
 }
