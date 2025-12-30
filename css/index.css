@@ -245,7 +245,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 40px 20px 60px; position: rel
 .cat-footer strong { color: var(--pri); }
 footer { text-align: center; padding: 20px; color: var(--muted); font-size: 0.8rem; margin-top: 40px; }
 
-/* Responsive General */
+/* Responsive General - SE PISARÁ CON EL PARCHE FINAL, PERO LO DEJAMOS POR SEGURIDAD */
 @media (max-width: 900px) {
   .hero { flex-direction: column; text-align: center; gap: 40px; }
   .hero-graphic { width: 100%; max-width: 500px; margin: 0 auto; }
@@ -253,6 +253,7 @@ footer { text-align: center; padding: 20px; color: var(--muted); font-size: 0.8r
   .nav-wrap { flex-wrap: wrap; justify-content: center; gap: 15px; }
 }
 @media (max-width: 600px) {
+  /* Estas reglas serán mejoradas por el parche final */
   .nav-wrap { flex-direction: column; padding: 15px; gap: 15px; }
   nav ul { flex-wrap: wrap; justify-content: center; gap: 8px; }
   nav a { font-size: 0.85rem; padding: 6px 12px; background: var(--card-bg); border: 1px solid rgba(0,0,0,0.1); }
@@ -1339,4 +1340,81 @@ footer { text-align: center; padding: 20px; color: var(--muted); font-size: 0.8r
 .inputbox input:valid,
 .inputbox input:focus {
    color: #fff; /* Texto blanco cuando el fondo verde sube */
+}
+
+/* =========================================
+   11. PARCHE DE EMERGENCIA MÓVIL (STREET KINGZ APP STYLE)
+   ========================================= */
+@media (max-width: 768px) {
+  /* 1. Header crece para que quepa todo */
+  header {
+    height: auto !important;
+    min-height: auto !important;
+    padding-bottom: 15px;
+    background: var(--card-bg); /* Fondo sólido para que no se traslape */
+  }
+
+  /* 2. Convertimos la barra en una columna vertical limpia */
+  .nav-wrap {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 20px;
+    padding: 20px 15px;
+    height: auto !important;
+  }
+
+  /* 3. LOGO: El Rey manda arriba 👑 */
+  .logo {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 5px;
+    transform: scale(1.1); /* Un poco más grande para imponer */
+  }
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alineado para que se lea bien */
+  }
+
+  /* 4. MENÚ: Botones fáciles de tocar con el dedo */
+  nav { width: 100%; }
+  nav ul {
+    display: flex;
+    flex-wrap: wrap; /* Si no caben, bajan */
+    justify-content: center;
+    gap: 10px;
+    padding: 0;
+  }
+  nav ul li { list-style: none; }
+  nav a { /* Ojo: en tu CSS original usas 'nav a', no 'nav ul li a' */
+    display: block;
+    padding: 8px 16px;
+    background: rgba(128, 128, 128, 0.1); /* Fondo gris suave */
+    border-radius: 20px; /* Redonditos estilo chip */
+    font-size: 0.9rem;
+    border: 1px solid rgba(0,0,0,0.05); /* Borde sutil */
+  }
+  nav a.activo {
+    background: var(--pri);
+    color: white; /* El activo se ve verde sólido */
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+  }
+
+  /* 5. PERFIL Y MODO OSCURO: Abajo y centrados */
+  .nav-right {
+    width: 100%;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 5px;
+    border-top: 1px solid rgba(128,128,128,0.1); /* Línea separadora sutil */
+    padding-top: 20px;
+  }
+  
+  /* Ajuste del botón perfil en móvil */
+  .btn-out {
+     width: auto; /* Dejar que se ajuste al contenido */
+     min-width: 120px;
+  }
+
+  .neo-toggle-container { transform: scale(0.8); } /* Switch tamaño normal */
 }
