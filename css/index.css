@@ -1343,78 +1343,95 @@ footer { text-align: center; padding: 20px; color: var(--muted); font-size: 0.8r
 }
 
 /* =========================================
-   11. PARCHE DE EMERGENCIA MÓVIL (STREET KINGZ APP STYLE)
+   11. PARCHE DE EMERGENCIA MÓVIL (NUCLEAR FIX) ☢️
    ========================================= */
 @media (max-width: 768px) {
-  /* 1. Header crece para que quepa todo */
+  
+  /* Forzamos al Header a crecer */
   header {
     height: auto !important;
     min-height: auto !important;
-    padding-bottom: 15px;
-    background: var(--card-bg); /* Fondo sólido para que no se traslape */
+    padding: 15px 0 !important;
+    background: var(--card-bg) !important;
   }
 
-  /* 2. Convertimos la barra en una columna vertical limpia */
+  /* Contenedor en COLUMNA estricta */
   .nav-wrap {
+    display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    gap: 20px;
-    padding: 20px 15px;
+    justify-content: flex-start !important;
+    gap: 20px !important;
     height: auto !important;
+    width: 100% !important;
   }
 
-  /* 3. LOGO: El Rey manda arriba 👑 */
+  /* 1️⃣ EL LOGO VA PRIMERO (Arriba) */
   .logo {
-    width: 100%;
-    justify-content: center;
-    margin-bottom: 5px;
-    transform: scale(1.1); /* Un poco más grande para imponer */
+    order: 1 !important; /* <--- Esto obliga a ir primero */
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-bottom: 5px !important;
+    transform: scale(1.1);
   }
+  
+  /* Asegurar que el texto del logo se vea bien */
   .logo-text {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Alineado para que se lea bien */
+    align-items: flex-start;
+    margin-left: 10px;
   }
 
-  /* 4. MENÚ: Botones fáciles de tocar con el dedo */
-  nav { width: 100%; }
-  nav ul {
-    display: flex;
-    flex-wrap: wrap; /* Si no caben, bajan */
-    justify-content: center;
-    gap: 10px;
-    padding: 0;
-  }
-  nav ul li { list-style: none; }
-  nav a { /* Ojo: en tu CSS original usas 'nav a', no 'nav ul li a' */
-    display: block;
-    padding: 8px 16px;
-    background: rgba(128, 128, 128, 0.1); /* Fondo gris suave */
-    border-radius: 20px; /* Redonditos estilo chip */
-    font-size: 0.9rem;
-    border: 1px solid rgba(0,0,0,0.05); /* Borde sutil */
-  }
-  nav a.activo {
-    background: var(--pri);
-    color: white; /* El activo se ve verde sólido */
-    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
-  }
-
-  /* 5. PERFIL Y MODO OSCURO: Abajo y centrados */
-  .nav-right {
-    width: 100%;
-    justify-content: center;
-    gap: 25px;
-    margin-top: 5px;
-    border-top: 1px solid rgba(128,128,128,0.1); /* Línea separadora sutil */
-    padding-top: 20px;
+  /* 2️⃣ EL MENÚ VA SEGUNDO (En medio) */
+  nav {
+    order: 2 !important; /* <--- Esto obliga a ir segundo */
+    width: 100% !important;
+    margin: 0 !important;
   }
   
-  /* Ajuste del botón perfil en móvil */
-  .btn-out {
-     width: auto; /* Dejar que se ajuste al contenido */
-     min-width: 120px;
+  nav ul {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  
+  /* Botones estilo chip para el menú */
+  nav ul li a {
+    display: block;
+    padding: 8px 14px;
+    background: rgba(128, 128, 128, 0.08);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    white-space: nowrap; /* Que no se parta el texto */
   }
 
-  .neo-toggle-container { transform: scale(0.8); } /* Switch tamaño normal */
+  /* 3️⃣ EL PERFIL VA TERCERO (Abajo) */
+  .nav-right {
+    order: 3 !important; /* <--- Esto obliga a ir al final */
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 20px !important;
+    margin-top: 10px !important;
+    border-top: 1px solid rgba(0,0,0,0.05); /* Línea divisora */
+    padding-top: 15px !important;
+  }
+
+  /* Ajuste del botón perfil y switch */
+  .btn-out {
+     width: auto !important;
+     min-width: 120px;
+  }
+  
+  .neo-toggle-container {
+    transform: scale(0.7) !important;
+    margin: 0 !important;
+  }
 }
