@@ -10,7 +10,7 @@
     * { box-sizing: border-box; }
     body, html { margin: 0; padding: 0; height: 100%; font-family: sans-serif; overflow: hidden; }
 
-    /* Fondo Negro Puro (Como pediste) */
+    /* Fondo Negro Puro */
     .wrapper {
       width: 100%;
       height: 100%;
@@ -39,7 +39,7 @@
       transform: rotateY(180deg);
     }
 
-    /* --- ESTILO DE LA TARJETA (TU DISEÑO NUEVO) --- */
+    /* --- ESTILO DE LA TARJETA --- */
     .form-face {
       position: absolute;
       top: 0; left: 0;
@@ -52,7 +52,6 @@
       gap: 20px;
       padding: 2rem 3rem;
       
-      /* TU CSS ORIGINAL DE LA TARJETA */
       border: 1px solid transparent;
       border-image: linear-gradient(transparent, #ffe0a6, transparent) 1;
       border-width: 0 2px 0px 2px;
@@ -176,7 +175,7 @@
               <path d="M9.5 12.5L2.81805 18.5002H21.6362L15 12.5L12 15L9.5 12.5Z"></path>
             </g>
           </svg>
-          <input class="input" type="email" id="loginEmail" placeholder="Email" />
+          <input class="input" type="email" id="loginEmail" placeholder="Email o Usuario" />
         </div>
 
         <div class="input-container">
@@ -255,7 +254,7 @@
     const USERS_KEY = 'miwebzapatos_users';
     const SESSION_KEY = 'miwebzapatos_session';
 
-    // 1. Inicializar usuario default
+    // 1. Inicializar usuario default (Cliente)
     let users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
     if (users.length === 0) {
       users.push({ nombre: "Alexi", email: "alexi@ejemplo.com", password: "123", role: "user" });
@@ -268,11 +267,23 @@
 
       if(!email || !pass) return showToast('Completa los campos');
 
+      // 🔥 --- PUERTA SECRETA PARA EL JEFE --- 🔥
+      if(email === "admin" && pass === "admin123") {
+         localStorage.setItem('es_admin', 'true'); // Te damos la llave maestra
+         showToast('👑 MODO DIOS ACTIVADO');
+         setTimeout(() => window.location.href = 'gestion.html', 1500);
+         return; // Detenemos aquí para que no busque usuarios normales
+      }
+      // ------------------------------------------
+
+      // Lógica normal para clientes
       const currentUsers = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
       const user = currentUsers.find(u => u.email === email && u.password === pass);
 
       if(user) {
         localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+        // Quitamos el poder de admin por si acaso
+        localStorage.removeItem('es_admin'); 
         showToast(`Bienvenido, ${user.nombre}`);
         setTimeout(() => window.location.href = 'perfil.html', 1500);
       } else {
