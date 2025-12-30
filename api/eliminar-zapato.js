@@ -3,7 +3,6 @@ import { Client } from 'pg';
 const connectionString = 'postgresql://neondb_owner:npg_H6X4FlqKvxSj@ep-plain-brook-aem3qfgr-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require';
 
 export default async function handler(req, res) {
-  // 1. CORS (Permisos)
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -14,11 +13,13 @@ export default async function handler(req, res) {
     return;
   }
 
-  const client = new Client({ connectionString });
+  // 🔥 AQUÍ ESTÁ EL ARREGLO SSL
+  const client = new Client({
+    connectionString,
+    ssl: { rejectUnauthorized: false }
+  });
 
   try {
-    // Vercel parsea el body automáticamente, pero a veces viene como string si se envía raro.
-    // Por seguridad, intentamos leerlo directo.
     const { id } = req.body; 
 
     await client.connect();

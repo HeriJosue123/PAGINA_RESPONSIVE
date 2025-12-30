@@ -1,33 +1,31 @@
-const { Client } = require('pg');
+import { Client } from 'pg';
 
-// ⚠️ PEGA AQUÍ TU LINK (El mismo que usaste en probar-db.js)
 const connectionString = 'postgresql://neondb_owner:npg_H6X4FlqKvxSj@ep-plain-brook-aem3qfgr-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require';
 
-exports.handler = async (event, context) => {
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
+  // 🔥 AQUÍ ESTÁ EL ARREGLO SSL
   const client = new Client({
-    connectionString: connectionString,
+    connectionString,
+    ssl: { rejectUnauthorized: false }
   });
 
   try {
     await client.connect();
-    // Pedimos los zapatos a la base de datos
-    const result = await client.query('SELECT * FROM productos');
+    const result = await client.query('SELECT * FROM productos ORDER BY id DESC');
     await client.end();
-
-    // Devolvemos los zapatos en formato JSON (para que el HTML los entienda)
-    return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*' // Permite que cualquiera lea los datos
-      },
-      body: JSON.stringify(result.rows)
-    };
-
+    res.status(200).json(result.rows);
   } catch (error) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: error.message })
-    };
+    console.error(error);
+    res.status(500).json({ error: error.message });
   }
-};
+}

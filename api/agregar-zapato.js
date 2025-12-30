@@ -3,7 +3,6 @@ import { Client } from 'pg';
 const connectionString = 'postgresql://neondb_owner:npg_H6X4FlqKvxSj@ep-plain-brook-aem3qfgr-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require';
 
 export default async function handler(req, res) {
-  // 1. CORS (Permisos)
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -14,15 +13,18 @@ export default async function handler(req, res) {
     return;
   }
 
-  // Solo aceptamos POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const client = new Client({ connectionString });
+  // 🔥 AQUÍ ESTÁ EL ARREGLO SSL
+  const client = new Client({
+    connectionString,
+    ssl: { rejectUnauthorized: false }
+  });
 
   try {
-    const { nombre, precio, imagen, categoria } = req.body; // En Vercel 'req.body' ya viene listo
+    const { nombre, precio, imagen, categoria } = req.body;
 
     await client.connect();
     
